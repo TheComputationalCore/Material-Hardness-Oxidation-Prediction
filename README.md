@@ -1,17 +1,15 @@
 #   Material Hardness & Oxidation Prediction
+
 ### Intelligent Microstructure–Property Modeling for Materials Engineering  
-**Author:** Dinesh Chandra  
+
 **Live Demo:** https://your-deployment-url.com  
+
 **Research Backing:**  
-*[Machine learning–assisted prediction of mechanical properties of EN-8 alloy steel — IOP Conference Series](https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061)*
 
----
+*[Machine learning–assisted prediction of mechanical properties of EN-8 alloy steel — IOP Conference Series]
 
-<div align="center">
-  <img src="screenshots/demo-01-home.png" width="750">
-</div>
+(https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061)*
 
----
 
 ## 🚀 Overview
 
