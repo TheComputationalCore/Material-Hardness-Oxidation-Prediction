@@ -1,9 +1,3 @@
-
----
-
-## `docs/ARCHITECTURE.md`
-
-```md
 # Architecture — Material Hardness & Oxidation Prediction
 
 ## High-level components
@@ -32,10 +26,10 @@
    - Deploy via Render (or other WSGI hosts)
 
 ## Dataflow (simple)
-1. CSVs in `data/` → training scripts load data
-2. Pipelines preprocess → train → save pipeline artifact
-3. Flask app loads saved pipelines from `models/`
-4. User inputs → validator → pipeline → prediction → UI/JSON response
+1. CSVs in `data/` → training scripts load data  
+2. Pipelines preprocess → train → save pipeline artifact  
+3. Flask app loads saved pipelines from `models/`  
+4. User inputs → validator → pipeline → prediction → UI/JSON response  
 5. Predictions can be logged for monitoring (not enabled by default)
 
 ## Deployment notes (Render)
@@ -45,7 +39,7 @@
 - CI can be configured to run tests and only deploy when tests pass
 
 ## Next improvements
-- Add CI to validate model artifact presence and tests
-- Add monitoring and drift detection (e.g., logging predictions)
-- Add dataset versioning (DVC or Git LFS for large data)
+- Add CI to validate model artifact presence and tests  
+- Add monitoring and drift detection (e.g., logging predictions)  
+- Add dataset versioning (DVC or Git LFS for large data)  
 - Add reproducible experiment tracking (MLflow)
