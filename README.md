@@ -6,7 +6,7 @@
 
 **Research Backing:**  
 
-*[Machine learning–assisted prediction of mechanical properties of EN-8 alloy steel — IOP Conference Series]
+[Machine learning–assisted prediction of mechanical properties of EN-8 alloy steel — IOP Conference Series]
 
 (https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061)*
 
