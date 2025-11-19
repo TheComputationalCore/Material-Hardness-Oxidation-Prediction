@@ -1,4 +1,4 @@
-# 🔥 Material Hardness & Oxidation Prediction
+#   Material Hardness & Oxidation Prediction
 ### Intelligent Microstructure–Property Modeling for Materials Engineering  
 **Author:** Dinesh Chandra  
 **Live Demo:** https://your-deployment-url.com  
