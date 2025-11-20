@@ -4,7 +4,14 @@ services:
     env: python
     plan: starter
     region: oregon
-    buildCommand: "pip install -r requirements.txt && make train || true"
-    startCommand: "gunicorn src.app.app:create_app()"
-    repo: "TheComputationalCore/material-hardness-oxidation-prediction"
-    branch: main
+
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      # Models must already be committed to repo (no training in Render)
+    
+    startCommand: >
+      gunicorn "src.app.app:app"
+      --bind 0.0.0.0:$PORT
+      --workers 2
+      --timeout 120
