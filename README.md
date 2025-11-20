@@ -33,11 +33,6 @@
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
   </a>
 
-  <!-- Tests -->
-  <a href="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions">
-    <img src="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions/workflows/tests.yml/badge.svg" alt="Tests">
-  </a>
-
   <!-- Last Commit -->
   <img src="https://img.shields.io/github/last-commit/TheComputationalCore/Material-Hardness-Oxidation-Prediction" alt="Last Commit">
 
