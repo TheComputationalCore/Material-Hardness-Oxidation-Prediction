@@ -1,69 +1,67 @@
-#   Material Hardness & Oxidation Prediction
-
+# 🔥 Material Hardness & Oxidation Prediction  
 ### Intelligent Microstructure–Property Modeling for Materials Engineering  
 
 **Live Demo:** https://material-hardness-oxidation-prediction.onrender.com  
 
 **Research Backing:**  
+[Machine learning–assisted prediction of mechanical properties of EN‑8 alloy steel — IOP Conference Series](https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061)
 
-[Machine learning–assisted prediction of mechanical properties of EN-8 alloy steel — IOP Conference Series]
+---
 
-(https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061)*
-
-
-## 🚀 Overview
+## 🚀 Overview  
 
 This project delivers a **high-fidelity machine learning system** for predicting:
 
 1. **Material Hardness**  
 2. **Oxidation Rate**
 
-It integrates advanced ML pipelines, automated input validation, SHAP-based explainability, and a modern browser-based interface — bridging **materials science** with **production-grade ML engineering**.
+It integrates advanced ML pipelines, automated input validation, SHAP‑based interpretability, and a modern browser interface — bridging **materials science** with **production‑grade ML engineering**.
 
 The system enables researchers and engineers to:
 
-- Predict microstructure-driven material properties within seconds  
-- Understand governing factors via explainable AI  
-- Experiment with digital process variations  
+- Predict microstructure-driven properties instantly  
+- Understand governing factors using explainable AI  
+- Experiment with process variables digitally  
 - Accelerate materials & process optimization  
 
 ---
 
-## 🧪 Scientific Foundation
+## 🧪 Scientific Foundation  
 
 Hardness and oxidation behavior strongly influence:
 
-- Heat treatment performance  
+- Heat treatment outcomes  
 - Wear and corrosion resistance  
 - Component lifetime  
-- Structural reliability  
-- Surface engineering outcomes  
+- Surface engineering performance  
+- High‑temperature reliability  
 
-Experiments are **expensive and time-intensive**, motivating the need for **AI surrogate models**.
+Physical experiments are **expensive and time‑consuming**, motivating AI surrogate modeling.
 
-This system extends the ideas from:
+This system extends ideas from:
 
-**Dinesh Chandra (2020). Experimental Studies of Stellite-6 hardfacing layer on EN-8 & mild-steel.**  
-IOP Conference Series: Materials Science and Engineering.  
-https://doi.org/10.1088/1757-899X/998/1/012061
+**Dinesh Chandra (2020)**  
+*Experimental Studies of Stellite‑6 hardfacing layer on EN‑8 & Mild Steel*  
+IOP Conference Series: Materials Science and Engineering  
+https://doi.org/10.1088/1757-899X/998/1/012061  
 
 ---
 
-## 🏗 Architecture
+## 🏗 Architecture  
 
 ```
 material-hardness-oxidation-prediction/
 │
-├── data/                     # Datasets + documentation
+├── data/                     # Datasets
 ├── models/                   # Trained ML models + metadata
 ├── src/
-│   ├── app/                  # Flask app (UI, routes, HTML templates, static files)
-│   ├── inference/            # Prediction + schema validation logic
-│   ├── models/               # ML pipelines (training & evaluation)
-│   └── utils/                # Config & common utilities
+│   ├── app/                  # Flask app (UI, routes, templates)
+│   ├── inference/            # Prediction + schema validation
+│   ├── models/               # ML pipelines + training scripts
+│   └── utils/                # Shared utilities
 │
-├── screenshots/              # UI and SHAP visualization images
-├── tests/                    # pytest suite
+├── screenshots/              # UI previews & SHAP visuals
+├── tests/                    # Pytest suite
 ├── requirements.txt
 ├── render.yaml
 ├── Procfile
@@ -72,52 +70,34 @@ material-hardness-oxidation-prediction/
 
 ---
 
-## 🌐 UI Preview
+## 🌐 UI Preview  
 
 ### **Home Interface**
-<div align="center">
-  <img src="screenshots/demo-01-home.png" width="750">
-</div>
-
----
+<img src="screenshots/demo-01-home.png" width="750">
 
 ### **Prediction Workflow**
-<div align="center">
-  <img src="screenshots/demo-02-predict.png" width="750">
-</div>
-
----
+<img src="screenshots/demo-02-predict.png" width="750">
 
 ### **Hardness Explainability (SHAP)**
-<div align="center">
-  <img src="screenshots/demo-03-hardness-shap.png" width="750">
-</div>
-
----
+<img src="screenshots/demo-03-hardness-shap.png" width="750">
 
 ### **Oxidation Explainability (SHAP)**
-<div align="center">
-  <img src="screenshots/demo-04-oxidation-shap.png" width="750">
-</div>
+<img src="screenshots/demo-04-oxidation-shap.png" width="750">
 
 ---
 
 ## 📊 Exploratory Data Analysis (EDA)
 
 <details>
-<summary><strong>Click to expand EDA visualizations</strong></summary>
+<summary><strong>Expand EDA Visualizations</strong></summary>
 
 ### Hardness Dataset
-<div align="center">
-  <img src="src/app/static/plots/eda_hardness_correlation.png" width="420">
-  <img src="src/app/static/plots/eda_hardness_hist.png" width="420">
-</div>
+<img src="src/app/static/plots/eda_hardness_correlation.png" width="420">
+<img src="src/app/static/plots/eda_hardness_hist.png" width="420">
 
 ### Oxidation Dataset
-<div align="center">
-  <img src="src/app/static/plots/eda_oxidation_correlation.png" width="420">
-  <img src="src/app/static/plots/eda_oxidation_hist.png" width="420">
-</div>
+<img src="src/app/static/plots/eda_oxidation_correlation.png" width="420">
+<img src="src/app/static/plots/eda_oxidation_hist.png" width="420">
 
 </details>
 
@@ -126,53 +106,49 @@ material-hardness-oxidation-prediction/
 ## 📈 Model Performance & Diagnostics
 
 <details>
-<summary><strong>Click to expand performance plots</strong></summary>
+<summary><strong>Expand Performance Visuals</strong></summary>
 
 ### Hardness Model
-<div align="center">
-  <img src="src/app/static/plots/perf_hardness_actual_vs_pred.png" width="420">
-  <img src="src/app/static/plots/perf_hardness_residuals.png" width="420">
-  <img src="src/app/static/plots/fi_hardness_coefficients.png" width="420">
-</div>
+<img src="src/app/static/plots/perf_hardness_actual_vs_pred.png" width="420">
+<img src="src/app/static/plots/perf_hardness_residuals.png" width="420">
+<img src="src/app/static/plots/fi_hardness_coefficients.png" width="420">
 
 ### Oxidation Model
-<div align="center">
-  <img src="src/app/static/plots/perf_oxidation_actual_vs_pred.png" width="420">
-  <img src="src/app/static/plots/perf_oxidation_residuals.png" width="420">
-  <img src="src/app/static/plots/fi_oxidation_importances.png" width="420">
-</div>
+<img src="src/app/static/plots/perf_oxidation_actual_vs_pred.png" width="420">
+<img src="src/app/static/plots/perf_oxidation_residuals.png" width="420">
+<img src="src/app/static/plots/fi_oxidation_importances.png" width="420">
 
 </details>
 
 ---
 
-## 🧠 Machine Learning Pipelines
+## 🧠 Machine Learning Pipelines  
 
-Each model provides:
+Each model includes:
 
-- Data validation  
+- Schema validation  
 - Preprocessing & feature engineering  
-- Scikit-learn regression pipelines  
-- Hyperparameter tuning  
-- SHAP-based explainability  
+- Scikit‑learn pipelines  
+- Regression models (Linear Regression, Random Forest)  
+- SHAP‑based explainability  
 - Metadata for reproducibility  
 
-### Training Scripts
+### **Training Scripts**
 ```
 src/models/train_hardness.py
 src/models/train_oxidation.py
 ```
 
-### Evaluation
+### **Evaluation**
 ```
 src/models/evaluate.py
 ```
 
 ---
 
-## 🛠 Setup (Local Development)
+## 🛠 Local Development  
 
-### **1. Clone the repository**
+### **1. Clone repo**
 ```bash
 git clone https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction
 cd Material-Hardness-Oxidation-Prediction
@@ -185,16 +161,16 @@ conda activate mhoc
 pip install -r requirements.txt
 ```
 
-### **3. Run application**
+### **3. Run app**
 ```bash
 python src/app/app.py
 ```
 
-Visit: http://localhost:5000
+Visit: http://localhost:5000  
 
 ---
 
-## 🧪 Testing
+## 🧪 Testing  
 ```bash
 pytest -q
 ```
@@ -203,36 +179,33 @@ pytest -q
 
 ## 🚀 Deployment (Render)
 
-### **Build Command**
+### Build Command
 ```
 pip install -r requirements.txt
 ```
 
-### **Start Command**
+### Start Command
 ```
 gunicorn "app.app:app" --chdir src --bind 0.0.0.0:$PORT --workers 2
 ```
 
 ---
 
-## 📘 Documentation
+## 📘 Documentation  
 
-- MODEL_CARD.md  
-- ARCHITECTURE.md  
-- API_REFERENCE.md  
-
----
-
-
-## 👤 Author
-
-**Dinesh Chandra — TheComputationalCore**
-
-- GitHub: https://github.com/TheComputationalCore  
-- YouTube: https://www.youtube.com/@TheComputationalCore  
+- `docs/MODEL_CARD.md`  
+- `docs/ARCHITECTURE.md`  
+- `docs/API_REFERENCE.md`  
 
 ---
 
-## 📦 License
+## 👤 Author  
 
-MIT License — open for academic and professional use.
+**Dinesh Chandra — TheComputationalCore**  
+GitHub: https://github.com/TheComputationalCore  
+YouTube: https://www.youtube.com/@TheComputationalCore  
+
+---
+
+## 📦 License  
+MIT License — Open for academic & professional use.
