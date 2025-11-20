@@ -3,7 +3,6 @@ Utility functions for training pipelines.
 """
 
 import json
-import os
 from datetime import datetime
 import pandas as pd
 import joblib
