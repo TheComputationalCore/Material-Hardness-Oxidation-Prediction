@@ -6,18 +6,17 @@ and safe numeric conversion used throughout the project.
 from __future__ import annotations
 
 import json
-from datetime import datetime
-from typing import Any, Dict, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 import joblib
 import pandas as pd
-
 
 # -------------------------------------------------------
 # Numeric conversion
 # -------------------------------------------------------
 
-def to_float(value: Any) -> Optional[float]:
+def to_float(value: Any) -> float | None:
     """
     Safely convert a value into float.
     Returns None when:
@@ -29,7 +28,7 @@ def to_float(value: Any) -> Optional[float]:
     """
     if value is None:
         return None
-    if isinstance(value, float) or isinstance(value, int):
+    if isinstance(value, (float, int)):
         return float(value)
     if isinstance(value, str) and value.strip() == "":
         return None
@@ -93,7 +92,7 @@ def save_metadata(
     path: str,
     model_name: str,
     features: list,
-    metrics: Dict[str, float],
+    metrics: dict[str, float],
 ) -> None:
     """
     Save metadata about the trained model:
@@ -107,7 +106,7 @@ def save_metadata(
 
     metadata = {
         "model_name": model_name,
-        "trained_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "trained_at": datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "features": features,
         "metrics": metrics,
     }
@@ -120,7 +119,7 @@ def save_metadata(
         raise RuntimeError(f"Failed to save metadata to {path}: {e}") from e
 
 
-def load_metadata(path: str) -> Dict[str, Any]:
+def load_metadata(path: str) -> dict[str, Any]:
     """
     Load metadata associated with a trained model.
     """

@@ -11,16 +11,17 @@ from __future__ import annotations
 
 import os
 import traceback
-import joblib
-from typing import Any, Dict, Tuple, Optional
+from typing import Any
 
-from src.models.pipelines import HARDNESS_FEATURES, OXIDATION_FEATURES
+import joblib
+
 from src.inference.validator import (
+    ValidationError,
+    to_dataframe,
     validate_hardness_input,
     validate_oxidation_input,
-    to_dataframe,
-    ValidationError,
 )
+from src.models.pipelines import HARDNESS_FEATURES, OXIDATION_FEATURES
 
 # ---------------------------------------------------------
 # Model path resolution (robust across CI, local, Render)
@@ -44,7 +45,7 @@ _oxidation_model = None
 _oxidation_error = None
 
 
-def _load_model(path: str) -> Tuple[Optional[Any], Optional[str]]:
+def _load_model(path: str) -> tuple[Any | None, str | None]:
     """General safe model loader returning (model, error_message)."""
     if not os.path.exists(path):
         return None, f"Model file does not exist: {path}"
@@ -52,7 +53,7 @@ def _load_model(path: str) -> Tuple[Optional[Any], Optional[str]]:
     try:
         model = joblib.load(path)
         return model, None
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 — model deserialization errors vary by backend.
         print(f"[ERROR] Failed to load model at {path}: {e}")
         traceback.print_exc()
         return None, str(e)
@@ -74,7 +75,7 @@ def _ensure_models_loaded():
 # Generic prediction helper
 # ---------------------------------------------------------
 
-def _predict(model, validator_fn, features, payload) -> Dict[str, Any]:
+def _predict(model, validator_fn, features, payload) -> dict[str, Any]:
     """
     Generic prediction wrapper.
     Validates input, builds DataFrame, runs model.
@@ -89,7 +90,7 @@ def _predict(model, validator_fn, features, payload) -> Dict[str, Any]:
     except ValidationError as ve:
         return {"ok": False, "error": str(ve)}
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 — convert unexpected model failures to the API error shape.
         print("[ERROR] Unexpected prediction failure:", e)
         traceback.print_exc()
         return {"ok": False, "error": "Internal error during prediction. Check logs."}
@@ -99,7 +100,7 @@ def _predict(model, validator_fn, features, payload) -> Dict[str, Any]:
 # Public prediction APIs
 # ---------------------------------------------------------
 
-def predict_hardness(payload: dict) -> Dict[str, Any]:
+def predict_hardness(payload: dict) -> dict[str, Any]:
     _ensure_models_loaded()
 
     if _hardness_model is None:
@@ -108,7 +109,7 @@ def predict_hardness(payload: dict) -> Dict[str, Any]:
     return _predict(_hardness_model, validate_hardness_input, HARDNESS_FEATURES, payload)
 
 
-def predict_oxidation(payload: dict) -> Dict[str, Any]:
+def predict_oxidation(payload: dict) -> dict[str, Any]:
     _ensure_models_loaded()
 
     if _oxidation_model is None:

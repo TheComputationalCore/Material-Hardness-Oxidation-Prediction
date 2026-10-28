@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from typing import Any, Dict, List
+from typing import Any
 
 import pandas as pd
 
@@ -45,14 +45,14 @@ def validate_current(value: Any) -> float:
     return current
 
 
-def validate_hardness_input(data: Dict[str, Any]) -> Dict[str, Any]:
+def validate_hardness_input(data: dict[str, Any]) -> dict[str, Any]:
     return {
         "Material": validate_material(data.get("Material")),
         "Current": validate_current(data.get("Current")),
     }
 
 
-def validate_oxidation_input(data: Dict[str, Any]) -> Dict[str, Any]:
+def validate_oxidation_input(data: dict[str, Any]) -> dict[str, Any]:
     exposure = validate_numeric("Exposure_Time_h", data.get("Exposure_Time_h"))
     if exposure not in VALID_EXPOSURE_TIMES_H:
         raise ValidationError("Exposure time must be 5, 10, or 15 hours (paper-tested conditions).")
@@ -63,7 +63,7 @@ def validate_oxidation_input(data: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def to_dataframe(data: Dict[str, Any], feature_order: List[str]) -> pd.DataFrame:
+def to_dataframe(data: dict[str, Any], feature_order: list[str]) -> pd.DataFrame:
     try:
         row = [data[feature] for feature in feature_order]
     except KeyError as error:

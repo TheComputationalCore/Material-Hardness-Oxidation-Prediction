@@ -3,6 +3,7 @@ app.py — Flask application factory.
 """
 
 from flask import Flask
+
 from src.app.routes import app_bp
 
 

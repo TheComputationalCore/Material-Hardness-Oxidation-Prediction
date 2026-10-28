@@ -4,7 +4,6 @@ from flask import Blueprint, jsonify, render_template, request
 
 from src.inference.predict import predict_hardness, predict_oxidation
 
-
 app_bp = Blueprint("app_bp", __name__)
 
 

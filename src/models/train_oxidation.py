@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import LeaveOneGroupOut, cross_val_predict
@@ -10,14 +10,13 @@ from sklearn.model_selection import LeaveOneGroupOut, cross_val_predict
 from src.models.pipelines import OXIDATION_FEATURES, build_oxidation_pipeline
 from src.models.utils import load_csv, save_metadata, save_model
 
-
 DATA_PATH = "data/oxidation.csv"
 MODEL_PATH = "models/oxidation_model.joblib"
 META_PATH = "models/oxidation_metadata.json"
 TARGET = "Areal_Mass_Gain_g_mm2"
 
 
-def compute_metrics(y_true, y_pred) -> Dict[str, float]:
+def compute_metrics(y_true, y_pred) -> dict[str, float]:
     """Compute regression metrics for out-of-fold predictions."""
     return {
         "MAE": float(mean_absolute_error(y_true, y_pred)),
@@ -26,7 +25,7 @@ def compute_metrics(y_true, y_pred) -> Dict[str, float]:
     }
 
 
-def train_oxidation_model() -> Dict[str, Any]:
+def train_oxidation_model() -> dict[str, Any]:
     """Group-validation by current, then fit the deployable pipeline on all rows."""
     df = load_csv(DATA_PATH)
     required = [*OXIDATION_FEATURES, TARGET, "Data_Status"]
@@ -61,9 +60,9 @@ def train_oxidation_model() -> Dict[str, Any]:
             "method": "LeaveOneGroupOut",
             "group": "Current",
             "groups": sorted(float(value) for value in groups.unique()),
-            "n_samples": int(len(df)),
-            "n_validation_predictions": int(len(predictions)),
-            "final_fit_rows": int(len(df)),
+            "n_samples": len(df),
+            "n_validation_predictions": len(predictions),
+            "final_fit_rows": len(df),
             "target": TARGET,
             "target_unit": "g/mm^2; cumulative mass gain per exposed area, not time-normalized",
         },

@@ -1,6 +1,8 @@
 # tests/test_app.py
 import json
+
 from src.app.app import create_app
+
 
 def test_index_route():
     app = create_app()

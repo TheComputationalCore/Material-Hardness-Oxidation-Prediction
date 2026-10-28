@@ -32,7 +32,7 @@ def evaluate(data_path, features, target, pipeline_builder):
         "RMSE": float(mean_squared_error(y, predictions, squared=False)),
         "R2": float(r2_score(y, predictions)),
         "validation": "LeaveOneGroupOut grouped by Current",
-        "n_samples": int(len(df)),
+        "n_samples": len(df),
         "n_groups": int(df["Current"].nunique()),
     }
 
