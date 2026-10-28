@@ -6,7 +6,7 @@ and safe numeric conversion used throughout the project.
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 import joblib
@@ -106,7 +106,7 @@ def save_metadata(
 
     metadata = {
         "model_name": model_name,
-        "trained_at": datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "trained_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),  # noqa: UP017 — Python 3.10 compatibility.
         "features": features,
         "metrics": metrics,
     }
