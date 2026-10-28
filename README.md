@@ -93,6 +93,76 @@ An earlier project version included interpolated/derived rows and evaluated a ra
 
 The interface provides selectors for substrate, current, and exposure time; displays hardness and cumulative areal mass-gain estimates; and reports the paper-tested schedule for heat input and travel speed. Inputs are restricted to values represented in the experiment.
 
+### Screenshots and figures
+
+The repository retains screenshots and plots from earlier versions of the project as part of its development history. **They are archival material, not screenshots or results from the current paper-aligned application.** In particular, the old interface screenshots show inputs that are no longer accepted, and the old model plots use features and data that are not part of the current six-row hardness and eighteen-row oxidation training datasets. Do not use those images to describe the current API, features, model performance, or scientific conclusions.
+
+The live application link above shows the current interface. Expand the sections below to view the archived visuals and their context.
+
+<details>
+<summary>Archived application screenshots</summary>
+
+These captures document the former UI, which included heat input, soaking time, carbon, and manganese inputs. Those fields were removed because they are not independent predictors supported by the paper-aligned model.
+
+| Former prediction form | Former prediction result |
+|---|---|
+| ![Archived screenshot of the former prediction form](screenshots/demo-01-home.png) | ![Archived screenshot of a former prediction result](screenshots/demo-02-predict.png) |
+
+</details>
+
+<details>
+<summary>Archived SHAP plots</summary>
+
+These plots are retained for historical completeness only. Their generic “Feature 0” labels do not identify the current model inputs, and SHAP is not part of the current application or validated workflow.
+
+![Archived hardness SHAP feature-importance plot](screenshots/demo-03-hardness-shap.png)
+
+![Archived oxidation SHAP feature-importance plot](screenshots/demo-04-oxidation-shap.png)
+
+The same two plots are also preserved as the former app's static assets: [`shap_hardness_bar.png`](src/app/static/shap_hardness_bar.png) and [`shap_oxidation_bar.png`](src/app/static/shap_oxidation_bar.png).
+
+</details>
+
+<details>
+<summary>Archived exploratory and model-diagnostic charts</summary>
+
+The charts below were generated for the earlier expanded dataset and earlier feature set. They are not the Leave-One-Group-Out validation results reported in this README. The old correlations and feature-importance plots include variables excluded from the current models; the actual-versus-predicted and residual plots should not be read as independent test-set performance.
+
+#### Earlier exploratory analysis
+
+| Hardness correlation | Hardness distributions |
+|---|---|
+| ![Archived hardness correlation heatmap](src/app/static/plots/eda_hardness_correlation.png) | ![Archived hardness feature distributions](src/app/static/plots/eda_hardness_hist.png) |
+
+| Oxidation correlation | Oxidation distributions |
+|---|---|
+| ![Archived oxidation correlation heatmap](src/app/static/plots/eda_oxidation_correlation.png) | ![Archived oxidation feature distributions](src/app/static/plots/eda_oxidation_hist.png) |
+
+#### Earlier model diagnostics
+
+| Hardness coefficients | Oxidation feature importance |
+|---|---|
+| ![Archived hardness regression coefficients](src/app/static/plots/fi_hardness_coefficients.png) | ![Archived oxidation random-forest feature importance](src/app/static/plots/fi_oxidation_importances.png) |
+
+| Hardness actual vs predicted | Hardness residuals |
+|---|---|
+| ![Archived hardness actual-versus-predicted chart](src/app/static/plots/perf_hardness_actual_vs_pred.png) | ![Archived hardness residual chart](src/app/static/plots/perf_hardness_residuals.png) |
+
+| Oxidation actual vs predicted | Oxidation residuals |
+|---|---|
+| ![Archived oxidation actual-versus-predicted chart](src/app/static/plots/perf_oxidation_actual_vs_pred.png) | ![Archived oxidation residual chart](src/app/static/plots/perf_oxidation_residuals.png) |
+
+</details>
+
+<details>
+<summary>Former concept banner</summary>
+
+This artwork is an early, illustrative project graphic. Its microstructure imagery and embedded chart labels are decorative and are not experimental data or outputs from the current models.
+
+![Archived illustrative project banner](assets/banner.png)
+
+</details>
+
 ### JSON API
 
 `POST /api/v1/predict`
