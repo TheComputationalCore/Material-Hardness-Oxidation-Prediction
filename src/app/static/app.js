@@ -1,205 +1,160 @@
-// static/app.js
 (() => {
-  // helpers
-  const $ = (s) => document.querySelector(s);
-  const showToast = (msg, timeout=3000) => {
-    const t = $('#toast');
-    if(!t) return;
-    t.textContent = msg; t.style.display='block';
-    setTimeout(()=> t.style.display='none', timeout);
+  const $ = (selector) => document.querySelector(selector);
+  const form = $("#predict-form");
+  const button = $("#predict-btn");
+  const spinner = $("#btn-spinner");
+  const buttonText = $("#btn-text");
+  const resultsArea = $("#results-area");
+
+  const showToast = (message, timeout = 3000) => {
+    const toast = $("#toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.display = "block";
+    window.setTimeout(() => { toast.style.display = "none"; }, timeout);
   };
 
-  // dark mode
-  const themeToggle = $('#theme-toggle');
   const applyTheme = (dark) => {
-    document.body.classList.toggle('dark', !!dark);
-    localStorage.setItem('mhoc_dark', !!dark ? '1':'0');
+    document.body.classList.toggle("dark", dark);
+    try {
+      window.localStorage.setItem("mhoc_dark", dark ? "1" : "0");
+    } catch (_) {
+      // Theme remains usable when browser storage is unavailable.
+    }
   };
-  const initTheme = () => {
-    const saved = localStorage.getItem('mhoc_dark');
-    if(saved === null) { applyTheme(false); } else { applyTheme(saved === '1'); }
+
+  try {
+    applyTheme(window.localStorage.getItem("mhoc_dark") === "1");
+  } catch (_) {
+    applyTheme(false);
+  }
+
+  const themeButton = $("#theme-toggle");
+  if (themeButton) {
+    themeButton.addEventListener("click", () => {
+      applyTheme(!document.body.classList.contains("dark"));
+    });
+  }
+
+  const schedule = {
+    "120": { heatInput: "0.800", travelSpeed: "2.25" },
+    "140": { heatInput: "0.864", travelSpeed: "2.43" },
+    "160": { heatInput: "0.912", travelSpeed: "2.63" }
   };
-  if(themeToggle){ themeToggle.addEventListener('click', ()=> applyTheme(!document.body.classList.contains('dark'))); }
-  initTheme();
+  const currentSelect = $("#Current");
+  const heatInputNote = $("#heat-input-note");
+  const updateProcessNote = () => {
+    const condition = schedule[currentSelect.value];
+    heatInputNote.textContent =
+      "Paper schedule at " + currentSelect.value + " A: heat input " +
+      condition.heatInput + " kJ/mm and travel speed " +
+      condition.travelSpeed + " mm/s. These conditions vary together.";
+  };
+  currentSelect.addEventListener("change", updateProcessNote);
+  updateProcessNote();
 
-  // elements
-  const form = $('#predict-form');
-  const btn = $('#predict-btn');
-  const spinner = $('#btn-spinner');
-  const btnText = $('#btn-text');
-  const copyBtn = $('#copy-btn');
-  const resetBtn = $('#reset-btn');
-  const resultsArea = $('#results-area');
-  const viz = $('#viz');
-  const hardnessValueEl = $('#hardness-value');
-  const oxidationValueEl = $('#oxidation-value');
+  const renderResults = (hardness, massGain, hardnessError, oxidationError) => {
+    resultsArea.replaceChildren();
+    const box = document.createElement("div");
+    box.className = "result-item";
 
-  // bootstrap initial server-render state
-  const initial = window.__INITIAL__ || {};
-  if(initial.hardness || initial.oxidation) {
-    // ensure the values show in results area
-    setTimeout(()=> {
-      renderResults(initial.hardness, initial.oxidation, initial.hardness_error, initial.oxidation_error);
-      plotResults(initial.hardness, initial.oxidation);
-    }, 50);
-  }
-
-  function disableUI(disabled=true) {
-    btn.disabled = disabled;
-    if(disabled) {
-      spinner.style.display = 'inline-block';
-      btnText.textContent = 'Predicting…';
-    } else {
-      spinner.style.display = 'none';
-      btnText.textContent = 'Predict';
+    if (hardness !== null && hardness !== undefined) {
+      const row = document.createElement("div");
+      row.className = "result-row";
+      row.innerHTML = "<strong>Hardness:</strong> <span id=\"hardness-value\">" +
+        Number(hardness).toFixed(2) + "</span>";
+      box.appendChild(row);
     }
-  }
-
-  // build payload from form fields
-  function gatherPayload() {
-    return {
-      Material: $('#Material').value,
-      Current: $('#Current').value,
-      Heat_Input: $('#Heat_Input').value,
-      Soaking_Time: $('#Soaking_Time').value,
-      Carbon: $('#Carbon').value,
-      Manganese: $('#Manganese').value
-    };
-  }
-
-  // display results into DOM
-  function renderResults(hardness, oxidation, hardness_error, oxidation_error) {
-    resultsArea.innerHTML = '';
-    const box = document.createElement('div'); box.className='result-item';
-    if(hardness !== null && hardness !== undefined) {
-      const r = document.createElement('div'); r.className='result-row';
-      r.innerHTML = `<strong>Predicted Hardness:</strong> <span id="hardness-value">${Number(hardness).toFixed(4)}</span>`;
-      box.appendChild(r);
+    if (massGain !== null && massGain !== undefined) {
+      const row = document.createElement("div");
+      row.className = "result-row";
+      row.innerHTML = "<strong>Areal mass gain:</strong> <span id=\"oxidation-value\">" +
+        Number(massGain).toFixed(6) + " g/mm²</span>";
+      box.appendChild(row);
     }
-    if(oxidation !== null && oxidation !== undefined) {
-      const r2 = document.createElement('div'); r2.className='result-row';
-      r2.innerHTML = `<strong>Predicted Oxidation Rate:</strong> <span id="oxidation-value">${Number(oxidation)}</span>`;
-      box.appendChild(r2);
+    if (hardnessError) {
+      const error = document.createElement("div");
+      error.className = "error";
+      error.textContent = "Hardness error: " + hardnessError;
+      box.appendChild(error);
     }
-    if(hardness_error) {
-      const e = document.createElement('div'); e.className='error'; e.textContent = `Hardness Error: ${hardness_error}`; box.appendChild(e);
-    }
-    if(oxidation_error) {
-      const e2 = document.createElement('div'); e2.className='error'; e2.textContent = `Oxidation Error: ${oxidation_error}`; box.appendChild(e2);
+    if (oxidationError) {
+      const error = document.createElement("div");
+      error.className = "error";
+      error.textContent = "Oxidation error: " + oxidationError;
+      box.appendChild(error);
     }
     resultsArea.appendChild(box);
+  };
+
+  const initial = window.__INITIAL__ || {};
+  if (initial.hardness !== null || initial.oxidation !== null ||
+      initial.hardness_error || initial.oxidation_error) {
+    renderResults(
+      initial.hardness,
+      initial.oxidation,
+      initial.hardness_error,
+      initial.oxidation_error
+    );
   }
 
-  // Plotly small bar chart (normalized)
-  function plotResults(hardness, oxidation) {
-    if(!viz) return;
-    // if missing values, clear
-    if((hardness === null || hardness === undefined) && (oxidation === null || oxidation === undefined)) {
-      viz.innerHTML = '';
-      return;
-    }
+  const setBusy = (busy) => {
+    button.disabled = busy;
+    spinner.style.display = busy ? "inline-block" : "none";
+    buttonText.textContent = busy ? "Predicting…" : "Predict";
+  };
 
-    // create a normalized scale for visualization (not meaningful absolute)
-    const hv = hardness ? Number(hardness) : 0;
-    const ov = oxidation ? Number(oxidation) : 0;
-
-    // simple normalization (min-max within small ranges to look good)
-    const hv_scaled = (hv - 300) / 100; // approx
-    const ov_scaled = ov * 1000; // bring to comparable range visually
-
-    const data = [{
-      x: ['Hardness','Oxidation (x1000)'],
-      y: [Math.max(0, hv_scaled), Math.max(0, ov_scaled)],
-      type: 'bar',
-      marker: {color: ['#1f77b4','#ff7f0e']}
-    }];
-
-    const layout = {
-      margin: {l:30,r:20,t:10,b:30},
-      height: 220,
-      yaxis: {visible:true, title:''},
-      paper_bgcolor: 'transparent',
-      plot_bgcolor: 'transparent'
-    };
-
-    try {
-      Plotly.react(viz, data, layout, {displayModeBar:false});
-    } catch(e) {
-      viz.innerHTML = '<div class="muted">Visualization unavailable.</div>';
-    }
-  }
-
-  // copy to clipboard
-  if(copyBtn) {
-    copyBtn.addEventListener('click', async () => {
-      const h = $('#hardness-value') ? $('#hardness-value').textContent : '';
-      const o = $('#oxidation-value') ? $('#oxidation-value').textContent : '';
-      const txt = `Hardness: ${h}\nOxidation Rate: ${o}`;
+  if ($("#copy-btn")) {
+    $("#copy-btn").addEventListener("click", async () => {
+      const hardness = $("#hardness-value")?.textContent || "";
+      const oxidation = $("#oxidation-value")?.textContent || "";
       try {
-        await navigator.clipboard.writeText(txt);
-        showToast('Results copied to clipboard');
-      } catch(e) {
-        showToast('Copy failed');
+        await navigator.clipboard.writeText(
+          "Hardness: " + hardness + "\nAreal mass gain: " + oxidation
+        );
+        showToast("Results copied");
+      } catch (_) {
+        showToast("Copy failed");
       }
     });
   }
 
-  // reset button
-  if(resetBtn){
-    resetBtn.addEventListener('click', () => {
+  if ($("#reset-btn")) {
+    $("#reset-btn").addEventListener("click", () => {
       form.reset();
-      resultsArea.innerHTML = '<div class="muted">No predictions yet. Fill inputs and click Predict.</div>';
-      viz.innerHTML = '';
+      resultsArea.innerHTML =
+        '<div class="muted">Choose paper-tested conditions and click Predict.</div>';
     });
   }
 
-  // async submit
-  if(form){
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // client-side basic validation
-      const required = ['Material','Current','Heat_Input','Soaking_Time','Carbon','Manganese'];
-      for(let id of required) {
-        const el = document.getElementById(id);
-        if(!el || el.value === '' || el.value === null) { el && el.focus(); showToast('Please fill all required fields'); return; }
-      }
-
-      disableUI(true);
-      const payload = gatherPayload();
-
+  if (form) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setBusy(true);
+      const payload = {
+        Material: $("#Material").value,
+        Current: Number($("#Current").value),
+        Exposure_Time_h: Number($("#Exposure_Time_h").value)
+      };
       try {
-        const res = await fetch('/api/v1/predict', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+        const response = await fetch("/api/v1/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-
-        const data = await res.json();
-        renderResults(data.hardness, data.oxidation, data.hardness_error, data.oxidation_error);
-        plotResults(data.hardness, data.oxidation);
-        showToast('Prediction complete');
-
-      } catch(err) {
-        showToast('Request failed');
-        console.error(err);
+        const data = await response.json();
+        renderResults(
+          data.hardness,
+          data.oxidation_areal_mass_gain_g_mm2,
+          data.hardness_error,
+          data.oxidation_error || data.error
+        );
+        showToast(response.ok ? "Prediction complete" : "Input could not be predicted");
+      } catch (_) {
+        showToast("Prediction request failed");
       } finally {
-        disableUI(false);
+        setBusy(false);
       }
     });
-  }
-
-  // utility: disable UI
-  function disableUI(off=false) {
-    btn.disabled = off;
-    if(off) {
-      spinner.style.display = 'inline-block'; btnText.textContent = 'Predicting…';
-    } else {
-      spinner.style.display = 'none'; btnText.textContent = 'Predict';
-    }
-  }
-
-  // init toast DOM if missing
-  if(!$('#toast')) {
-    const t = document.createElement('div'); t.id='toast'; t.className='toast'; t.style.display='none'; document.body.appendChild(t);
   }
 })();

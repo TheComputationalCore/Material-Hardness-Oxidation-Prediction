@@ -1,45 +1,29 @@
-# Architecture — Material Hardness & Oxidation Prediction
+# Architecture
 
-## High-level components
-1. **Data** (`data/`)
-   - CSV files (`hardness.csv`, `oxidation.csv`)
-   - Small, curated dataset used for training and demonstration
+## Components
 
-2. **Training pipelines** (`src/models/`)
-   - `pipelines.py`: builds sklearn pipelines with preprocessing + model
-   - `train_hardness.py`, `train_oxidation.py`: train & save models to `models/`
-   - `evaluate.py`: evaluate saved models on full datasets
+1. data/: paper-transcribed measurements and row-level provenance.
+2. src/models/: sklearn preprocessing, grouped evaluation, training, and artifact metadata.
+3. models/: saved pipelines and metadata from the latest training run.
+4. src/inference/: supported-condition validation, lazy artifact loading, and prediction wrappers.
+5. src/app/: Flask routes and browser UI.
 
-3. **Inference** (`src/inference/`)
-   - `validator.py`: input validation and column ordering enforcement
-   - `predict.py`: loads models and exposes safe prediction functions used by the web app
+## Data and model flow
 
-4. **Serving** (`src/app/`)
-   - Flask app (factory pattern) and HTML UI
-   - `templates/index.html` and `static/style.css` for the user interface
+1. Training loads the six hardness or eighteen oxidation rows and rejects rows not marked as reported paper measurements.
+2. Leave-One-Group-Out validation groups by welding current, holding both materials and all exposure times at that current out together.
+3. After evaluation, the deployable pipeline is fit on all reported rows and saved with metadata.
+4. The app validates substrate, current, and exposure time against conditions in the paper before prediction.
+5. The API returns both outputs and defines oxidation as cumulative areal mass gain.
 
-5. **Artifacts** (`models/`)
-   - `*.joblib` model artifacts and `*_metadata.json` files with metrics and training info
+## Experimental limits encoded in the app
 
-6. **Dev & Ops**
-   - `requirements.txt`, `runtime.txt`, `Procfile`, `Makefile`
-   - Deploy via Render (or other WSGI hosts)
+Current accepts only 120, 140, or 160 A. Oxidation exposure accepts only 5, 10, or 15 hours. The paper's current, travel speed, and heat input vary together, so the app does not accept heat input as an independent user control. Carbon and manganese are also not independent model inputs because the small dataset ties their values to substrate identity.
 
-## Dataflow (simple)
-1. CSVs in `data/` → training scripts load data  
-2. Pipelines preprocess → train → save pipeline artifact  
-3. Flask app loads saved pipelines from `models/`  
-4. User inputs → validator → pipeline → prediction → UI/JSON response  
-5. Predictions can be logged for monitoring (not enabled by default)
+## Deployment
 
-## Deployment notes (Render)
-- Use the `Procfile` with gunicorn: `web: gunicorn src.app.app:create_app()`
-- Set Python runtime via `runtime.txt`
-- Set environment variables in Render (if any)
-- CI can be configured to run tests and only deploy when tests pass
+Render settings are in render.yaml; Procfile provides a Gunicorn entry point. The runtime is Python 3.10.13.
 
-## Next improvements
-- Add CI to validate model artifact presence and tests  
-- Add monitoring and drift detection (e.g., logging predictions)  
-- Add dataset versioning (DVC or Git LFS for large data)  
-- Add reproducible experiment tracking (MLflow)
+## Future work
+
+Collect independent replicate measurements, publish raw measurement provenance and uncertainty, confirm the oxidation mass-change sign from lab records, validate on new specimens, and only then expand supported materials or process ranges.

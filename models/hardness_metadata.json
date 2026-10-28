@@ -1,16 +1,27 @@
 {
     "model_name": "Hardness Model",
-    "trained_on": "2025-11-20 18:50:16",
+    "trained_at": "2026-10-28 18:53:46 UTC",
     "features": [
         "Material",
-        "Current",
-        "Heat_Input",
-        "Carbon",
-        "Manganese"
+        "Current"
     ],
     "metrics": {
-        "MAE": 1.6053370786517291,
-        "RMSE": 1.7866646754377074,
-        "R2": 0.9837030215062824
+        "MAE": 26.25,
+        "RMSE": 27.514768761521513,
+        "R2": -0.655686167304538
+    },
+    "validation": {
+        "method": "LeaveOneGroupOut",
+        "group": "Current",
+        "groups": [
+            120.0,
+            140.0,
+            160.0
+        ],
+        "n_samples": 6,
+        "n_validation_predictions": 6,
+        "final_fit_rows": 6,
+        "target": "Hardness",
+        "target_unit": "Vickers hardness number; test load not reported in source paper"
     }
 }

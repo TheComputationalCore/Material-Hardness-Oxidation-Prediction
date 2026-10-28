@@ -1,31 +1,19 @@
-Material,Current,Heat_Input,Soaking_Time,Carbon,Manganese,Oxidation_Rate
-EN-8,120,0.8,5,0.37,0.8,0.002603
-EN-8,125,0.816,5,0.37,0.8,0.002526
-EN-8,130,0.832,5,0.37,0.8,0.0024495
-EN-8,140,0.864,5,0.37,0.8,0.002296
-EN-8,160,0.912,5,0.37,0.8,0.002163
-Mild Steel,120,0.8,5,0.23,1.0,0.002692
-Mild Steel,125,0.816,5,0.23,1.0,0.002636
-Mild Steel,130,0.832,5,0.23,1.0,0.00258
-Mild Steel,140,0.864,5,0.23,1.0,0.00258
-Mild Steel,160,0.912,5,0.23,1.0,0.002237
-EN-8,120,0.8,10,0.37,0.8,0.005206
-EN-8,125,0.816,10,0.37,0.8,0.005051
-EN-8,130,0.832,10,0.37,0.8,0.004896
-EN-8,140,0.864,10,0.37,0.8,0.004592
-EN-8,160,0.912,10,0.37,0.8,0.004326
-Mild Steel,120,0.8,10,0.23,1.0,0.005384
-Mild Steel,125,0.816,10,0.23,1.0,0.00527
-Mild Steel,130,0.832,10,0.23,1.0,0.005156
-Mild Steel,140,0.864,10,0.23,1.0,0.005156
-Mild Steel,160,0.912,10,0.23,1.0,0.004474
-EN-8,120,0.8,15,0.37,0.8,0.008076
-EN-8,125,0.816,15,0.37,0.8,0.00783
-EN-8,130,0.832,15,0.37,0.8,0.007584
-EN-8,140,0.864,15,0.37,0.8,0.007584
-EN-8,160,0.912,15,0.37,0.8,0.006711
-Mild Steel,120,0.8,15,0.23,1.0,0.008232
-Mild Steel,125,0.816,15,0.23,1.0,0.008021
-Mild Steel,130,0.832,15,0.23,1.0,0.007809
-Mild Steel,140,0.864,15,0.23,1.0,0.007809
-Mild Steel,160,0.912,15,0.23,1.0,0.006489
+Material,Current,Heat_Input,Exposure_Time_h,Carbon,Manganese,Areal_Mass_Gain_g_mm2,Source,Source_Table,Data_Status
+EN-8,120,0.8,5,0.37,0.8,0.002603,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 9,reported_paper_measurement
+EN-8,140,0.864,5,0.37,0.8,0.002296,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 9,reported_paper_measurement
+EN-8,160,0.912,5,0.37,0.8,0.002163,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 9,reported_paper_measurement
+Mild Steel,120,0.8,5,0.23,1.0,0.002692,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 8,reported_paper_measurement
+Mild Steel,140,0.864,5,0.23,1.0,0.002580,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 8,reported_paper_measurement
+Mild Steel,160,0.912,5,0.23,1.0,0.002237,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 8,reported_paper_measurement
+EN-8,120,0.8,10,0.37,0.8,0.005206,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 11,reported_paper_measurement
+EN-8,140,0.864,10,0.37,0.8,0.004592,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 11,reported_paper_measurement
+EN-8,160,0.912,10,0.37,0.8,0.004326,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 11,reported_paper_measurement
+Mild Steel,120,0.8,10,0.23,1.0,0.005384,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 10,reported_paper_measurement
+Mild Steel,140,0.864,10,0.23,1.0,0.005156,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 10,reported_paper_measurement
+Mild Steel,160,0.912,10,0.23,1.0,0.004474,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 10,reported_paper_measurement
+EN-8,120,0.8,15,0.37,0.8,0.007809,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 13,reported_paper_measurement
+EN-8,140,0.864,15,0.37,0.8,0.006888,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 13,reported_paper_measurement
+EN-8,160,0.912,15,0.37,0.8,0.006489,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 13,reported_paper_measurement
+Mild Steel,120,0.8,15,0.23,1.0,0.008076,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 12,reported_paper_measurement
+Mild Steel,140,0.864,15,0.23,1.0,0.007740,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 12,reported_paper_measurement
+Mild Steel,160,0.912,15,0.23,1.0,0.006711,Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 12,reported_paper_measurement

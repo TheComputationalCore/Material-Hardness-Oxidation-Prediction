@@ -4,10 +4,7 @@ from src.inference.predict import predict_hardness, predict_oxidation
 SAMPLE_PAYLOAD = {
     "Material": "EN-8",
     "Current": 140,
-    "Heat_Input": 0.864,
-    "Soaking_Time": 10,
-    "Carbon": 0.37,
-    "Manganese": 0.8,
+    "Exposure_Time_h": 10,
 }
 
 

@@ -12,26 +12,22 @@ Contains:
 
 from __future__ import annotations
 
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
-
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 # -------------------------------------------------------------------
 # Canonical feature order (used across training + inference)
 # -------------------------------------------------------------------
 
-HARDNESS_FEATURES = ["Material", "Current", "Heat_Input", "Carbon", "Manganese"]
+HARDNESS_FEATURES = ["Material", "Current"]
 
 OXIDATION_FEATURES = [
     "Material",
     "Current",
-    "Heat_Input",
-    "Soaking_Time",
-    "Carbon",
-    "Manganese",
+    "Exposure_Time_h",
 ]
 
 # -------------------------------------------------------------------
@@ -40,8 +36,8 @@ OXIDATION_FEATURES = [
 
 categorical_cols = ["Material"]
 
-numeric_cols_hardness = ["Current", "Heat_Input", "Carbon", "Manganese"]
-numeric_cols_oxidation = ["Current", "Heat_Input", "Soaking_Time", "Carbon", "Manganese"]
+numeric_cols_hardness = ["Current"]
+numeric_cols_oxidation = ["Current", "Exposure_Time_h"]
 
 # -------------------------------------------------------------------
 # Preprocessors
@@ -81,7 +77,7 @@ preprocessor_oxidation = make_preprocessor(numeric_cols_oxidation)
 def build_hardness_pipeline() -> Pipeline:
     """
     Build the full sklearn pipeline for hardness prediction.
-    Simple baseline model: Linear Regression.
+    Linear baseline over the paper's measured current levels.
     """
     return Pipeline(
         steps=[
@@ -94,7 +90,7 @@ def build_hardness_pipeline() -> Pipeline:
 def build_oxidation_pipeline() -> Pipeline:
     """
     Build the full sklearn pipeline for oxidation rate prediction.
-    Uses RandomForestRegressor for non-linear interactions.
+    Uses a small random forest over the paper's measured current and time levels.
     """
     return Pipeline(
         steps=[

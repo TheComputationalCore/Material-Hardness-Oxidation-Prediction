@@ -4,14 +4,14 @@ install:
 	pip install -r requirements.txt
 
 train:
-	python src/models/train_hardness.py
-	python src/models/train_oxidation.py
+	python -m src.models.train_hardness
+	python -m src.models.train_oxidation
 
 evaluate:
-	python src/models/evaluate.py
+	python -m src.models.evaluate
 
 run:
-    python -m src.app.app
+	python -m src.app.app
 
 
 clean:

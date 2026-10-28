@@ -1,42 +1,58 @@
-# Model Card — Material Hardness & Oxidation Prediction
+# Model Card — Stellite-6 Hardfacing Property Predictor
 
-## Model Details
-- **Model names:** Hardness Model (LinearRegression pipeline), Oxidation Model (RandomForest pipeline)
-- **Versioning:** saved in `models/*_metadata.json` after each training run
-- **Date trained:** included in metadata file per training run
+## Model purpose
 
-## Intended Use
-- Predict mechanical hardness and oxidation rate for steel samples under controlled process conditions.
-- Input features: `Material`, `Current`, `Heat_Input`, `Soaking_Time` (oxidation only), `Carbon`, `Manganese`.
-- Typical users: materials scientists, process engineers, researchers evaluating relative trends.
+These models demonstrate regression over the published measurements in Chandra et al. (2020), “Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process,” DOI 10.1088/1757-899X/998/1/012061.
+
+The app predicts a reported Vickers hardness number and cumulative oxidation mass gain per exposed area for the tested Stellite-6 hardfaced EN-8 and mild-steel substrates.
+
+## Data and scope
+
+- Hardness: six values transcribed from Tables 5 and 6.
+- Oxidation: eighteen values transcribed from Tables 8–13.
+- Supported substrates: EN-8 and Mild Steel.
+- Supported currents: 120, 140, and 160 A.
+- Supported exposure times for oxidation: 5, 10, and 15 hours at 973 K.
+- Heat input, travel speed, and current are coupled in the paper's process schedule. Current is used as the model feature; heat input and chemistry are retained as data provenance, not as independent features.
+- The paper gives no replicate-level data or uncertainty estimates. The hardness table does not state the test load.
+- The oxidation target is reported in g/mm² and is not divided by time. The paper's printed mass-change subtraction order appears reversed; see data/README.md.
+
+## Models
+
+- Hardness: one-hot encoded substrate and standardized current followed by linear regression.
+- Oxidation: one-hot encoded substrate and standardized current and exposure hours followed by a 300-tree random forest.
+
+The saved pipelines are fit on all reported rows after grouped cross-validation. Metadata records the validation protocol and sample counts.
+
+## Evaluation
+
+Leave-One-Group-Out validation holds out all records at one current setting per fold. This prevents measurements at the same current from appearing in both training and validation for a fold. Two of the three folds require predicting outside the current range represented in that fold's training data.
+
+Latest grouped-validation metrics:
+
+| Target | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Hardness number | 26.25 | 27.51 | -0.656 |
+| Areal mass gain (g/mm²) | 0.000440 | 0.000512 | 0.937 |
+
+The negative hardness R² indicates poor current model generalization under this grouped protocol. All metrics are uncertain because validation uses only three current groups and no independent specimens. They are diagnostics, not evidence of performance on new materials or processes.
+
+## Intended use
+
+- Demonstrations and exploratory discussion of the reported experiment.
+- Predictions only for the two reported substrates and the paper-tested current and exposure settings.
 
 ## Not intended use
-- Safety-critical control decisions (do not use without domain validation).
-- Predictions outside the training domain (e.g., materials other than EN-8 or Mild Steel).
-- Extrapolating to drastically different processing conditions than in the dataset.
 
-## Performance
-- Training and validation metrics are computed and printed by `src/models/train_*.py`.
-- The exact metrics for the latest saved model are stored in `models/*_metadata.json`. Run the training scripts to reproduce.
+- Safety-critical or production process control.
+- Claims of causal effects for current independent of travel speed or heat input.
+- Prediction for other alloys, deposition procedures, temperatures, currents, exposure times, or specimen preparation.
+- Treating an estimate as a substitute for hardness or oxidation testing.
 
-## Data
-- `data/hardness.csv` and `data/oxidation.csv` contain the training records used for the models.
-- Each dataset includes the `Material` column with values `EN-8` and `Mild Steel`.
-- See `data/README.md` for column descriptions and provenance.
+## Limitations and risks
 
-## Factors affecting performance
-- Small dataset size means models are likely to generalize poorly without more data.
-- Feature distributions and interactions (e.g., Current × Heat_Input) affect accuracy.
-- Models are sensitive to correct data scaling and the exact feature ordering — the inference pipeline enforces ordering.
+The datasets are small and represent a single published study. No independent validation specimens are available. Inputs such as chemistry are not varied independently of material in this dataset. The paper reports no replicate variation, and the oxidation formula sign convention needs confirmation against source lab records. Predictions should be confirmed experimentally.
 
-## Ethical considerations and risk
-- Ensure results are validated by domain experts before operational use.
-- Log model predictions and monitor drift if used in production.
+## Maintenance
 
-## Maintenance & reproducibility
-- Train with `make train` and capture resulting metadata in `models/`.
-- Use the same Python environment from `requirements.txt` for reproducibility.
-
-## Contact
-- Project author: Dinesh Chandra
-- Repository: https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction
+Keep reported measurements, derived rows, and newly measured observations distinguishable using the Data_Status and source fields. Add independent experiments before making broader performance claims. Re-run grouped validation and retrain after changes to the dataset or pipeline.

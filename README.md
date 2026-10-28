@@ -1,256 +1,79 @@
-<p align="center">
-  <img src="assets/banner.png" alt="Material Hardness & Oxidation Prediction Banner">
-</p>
+# Stellite-6 Hardfacing Property Predictor
 
-# 🌌 Material Hardness & Oxidation Prediction  
-### **AI-Driven Microstructure–Property Intelligence Platform for Materials Engineering**
+An exploratory Flask application and scikit-learn models based on the experimental results in:
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/Flask-Framework-000000?style=for-the-badge&logo=flask&logoColor=white">
-  <img src="https://img.shields.io/badge/Scikit--Learn-ML%20Pipelines-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white">
-  <img src="https://img.shields.io/badge/Explainable%20AI-SHAP-EA4C89?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Deployment-Render-46E3B7?style=for-the-badge&logo=render&logoColor=black">
-  <img src="https://img.shields.io/badge/Testing-Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white">
-  <img src="https://img.shields.io/badge/License-MIT-3DDC84?style=for-the-badge">
-</p>
+> C. Dinesh Chandra, B. Rushikesh, Mohammed Numan, and B. Venkatesh, “Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process,” IOP Conference Series: Materials Science and Engineering 998 (2020), 012061. [DOI: 10.1088/1757-899X/998/1/012061](https://doi.org/10.1088/1757-899X/998/1/012061).
 
----
+The paper studies Stellite-6 TIG hardfacing on EN-8 and mild steel. This application models the paper's reported hardness and cumulative oxidation mass gain per exposed area. Its purpose is to demonstrate a small, traceable ML workflow; the available measurements are not enough to establish broad predictive generalization.
 
-# 🌐 Live Deployment
-Experience the fully deployed cloud version:  
-👉 **https://material-hardness-oxidation-prediction.onrender.com**
+## Experimental scope and data
 
----
+Training data contain only the values reported in the paper's tables:
 
-# ⭐ Executive Summary
-Material Hardness & Oxidation Prediction (**MHOC**) is a **research-grade materials engineering intelligence platform** that predicts mechanical and oxidation properties of Stellite-6 hardfaced ferrous alloys using ML + Explainable AI.
+- Hardness: six values across two substrates and three welding currents (Tables 5–6).
+- Oxidation: eighteen values across two substrates, three currents, and 5, 10, and 15 hour exposures (Tables 8–13).
+- Current settings are 120, 140, and 160 A. Their corresponding paper conditions include heat inputs of 0.800, 0.864, and 0.912 kJ/mm and changing travel speeds. These variables are coupled in the experiment.
+- Oxidation is tested at 973 K (700 °C). The target is cumulative mass gain divided by exposed area (g/mm²), not a rate divided by time.
 
-It integrates:
+See data/README.md for row provenance, target definitions, and the paper's sign-convention note. Interpolated values are not included as training measurements.
 
-- High-fidelity ML regression models  
-- SHAP-based explainability  
-- Scientific microstructure–property theory  
-- Full UI stack with Flask + Jinja  
-- All diagnostics (EDA, performance, feature analysis)  
-- Render cloud deployment  
+## Models and validation
 
----
+| Prediction | Features | Estimator |
+|---|---|---|
+| Hardness number | Substrate, welding current | Linear regression |
+| Cumulative areal mass gain | Substrate, welding current, exposure hours | Random forest regression |
 
-# 🔬 Scientific Foundation
-This system is grounded in the experimental paper:
+Categorical substrate is one-hot encoded and numeric inputs are standardized. Validation uses Leave-One-Group-Out with current as the group, so both substrates and all oxidation times at one current are held out together. The saved deployment model is then refit on all reported paper rows. There are only three current groups; two folds require predicting beyond the remaining current range.
 
-👉 **https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061**
+Grouped validation gives hardness MAE 26.25, RMSE 27.51, and R² -0.656; oxidation MAE 0.000440 g/mm², RMSE 0.000512 g/mm², and R² 0.937. The negative hardness R² indicates that the current linear model does not generalize well when a whole current level is withheld. These are limited diagnostics, not evidence of performance on new specimens.
 
-**“Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process”**  
-IOP Conf. Ser.: Materials Science & Engineering  
-Vol. 998 (2020), 012061  
-DOI: 10.1088/1757-899X/998/1/012061  
+The application accepts only the materials, currents, and exposure times represented in the paper. This does not make a prediction experimentally validated; use the output for exploration and verify it against new measurements before operational use.
 
----
+## Run locally
 
-# 🏗 System Architecture
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    python -m src.app.app
 
-```
-                   ┌───────────────────────────────-┐
-                   │         Web UI (Flask)         │
-                   │  Modern HTML • CSS • JS • Jinja│
-                   └──────────────┬─────────────────┘
-                                  │
-                           Input Validation
-                                  │
-                   ┌──────────────▼──────────────┐
-                   │      Inference Engine       │
-                   │ Pydantic • Preprocessing    │
-                   └──────────────┬──────────────┘
-                                  │
-       ┌──────────────────────────┼──────────────────────────┐
-       ▼                          ▼                          ▼
-┌──────────────┐       ┌────────────────┐       ┌────────────────────────┐
-│ Hardness ML  │       │ Oxidation ML   │       │ Metadata & Versioning  │
-│ LR + RF      │       │ Random Forest  │       │ JSON, checksums, logs  │
-└───────┬──────┘       └──────┬────────-┘       └────────────┬──────────-┘
-        │                     │                              │
-        └──────────────┬──────┴──────────────┬──────────────-┘
-                       ▼                     ▼
-         ┌──────────────────────┐   ┌──────────────────────────┐
-         │ SHAP Explainability  │   │ Performance Diagnostics  │
-         │ Global + Local       │   │ Residuals • R² • MAE     │
-         └──────────────────────┘   └──────────────────────────┘
-```
+Open http://localhost:5001.
 
----
+To reproduce grouped validation and refresh the saved models:
 
-# 🎨 UI Showcase  
+    python -m src.models.train_hardness
+    python -m src.models.train_oxidation
 
+To calculate grouped validation metrics without saving models:
 
-### **Home Interface**
-<img src="screenshots/demo-01-home.png" width="750">
+    python -m src.models.evaluate
 
-### **Prediction Workflow**
-<img src="screenshots/demo-02-predict.png" width="750">
+## API
 
-### **Hardness Explainability (SHAP)**
-<img src="screenshots/demo-03-hardness-shap.png" width="750">
+POST /api/v1/predict accepts a JSON object:
 
-### **Oxidation Explainability (SHAP)**
-<img src="screenshots/demo-04-oxidation-shap.png" width="750">
+    {
+      "Material": "EN-8",
+      "Current": 140,
+      "Exposure_Time_h": 10
+    }
 
+The response contains hardness, oxidation_areal_mass_gain_g_mm2, and validation errors. Oxidation is cumulative mass gain per exposed area in g/mm². Invalid input returns HTTP 400. See docs/API_REFERENCE.md for details.
 
----
+## Project layout
 
-# 📊 Exploratory Data Analysis  
+- data/: paper-transcribed training rows and provenance
+- docs/: model card, architecture, and API reference
+- models/: fitted sklearn pipelines and metadata
+- src/models/: preprocessing, training, grouped evaluation
+- src/inference/: model loading and condition validation
+- src/app/: Flask routes and interface
+- tests/: lightweight application and inference checks
 
-<details>
-<summary><strong>Expand EDA Visualizations</strong></summary>
+## Deployment
 
-### Hardness Dataset
-<img src="src/app/static/plots/eda_hardness_correlation.png" width="420">
-<img src="src/app/static/plots/eda_hardness_hist.png" width="420">
+The repository includes Render configuration in render.yaml and a Gunicorn Procfile. Install dependencies from requirements.txt and run the factory with Gunicorn.
 
-### Oxidation Dataset
-<img src="src/app/static/plots/eda_oxidation_correlation.png" width="420">
-<img src="src/app/static/plots/eda_oxidation_hist.png" width="420">
+## License
 
-</details>
-
----
-## 📈 Model Performance & Diagnostics
-<details>
-<summary><strong>Expand Performance Visuals</strong></summary>
-
-### Hardness Model
-<img src="src/app/static/plots/perf_hardness_actual_vs_pred.png" width="420">
-<img src="src/app/static/plots/perf_hardness_residuals.png" width="420">
-<img src="src/app/static/plots/fi_hardness_coefficients.png" width="420">
-
-### Oxidation Model
-<img src="src/app/static/plots/perf_oxidation_actual_vs_pred.png" width="420">
-<img src="src/app/static/plots/perf_oxidation_residuals.png" width="420">
-<img src="src/app/static/plots/fi_oxidation_importances.png" width="420">
-
-</details>
-
----
-
-# 🧠 Machine Learning Pipelines
-
-### Feature Engineering
-- Normalization  
-- Heat-input derived metrics  
-- Composition scaling  
-- Outlier control  
-
-### Models  
-| Task | Algorithms |
-|------|------------|
-| Hardness | Linear Regression, Random Forest |
-| Oxidation | Random Forest |
-
-### Explainability  
-- Global SHAP  
-- Local SHAP  
-- Sensitivity analysis
-  
----
-
-# 🧩 Directory Structure  
-```
-material-hardness-oxidation-prediction/
-├── data/
-├── models/
-├── screenshots/
-├── src/
-│   ├── app/
-│   ├── inference/
-│   ├── models/
-│   └── utils/
-├── tests/
-├── requirements.txt
-├── render.yaml
-├── Procfile
-└── runtime.txt
-```
-
----
-
-# 🔧 Local Development
-
-### 1. Clone Repo  
-```bash
-git clone https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction
-cd Material-Hardness-Oxidation-Prediction
-```
-
-### 2. Create Environment  
-```bash
-conda create -n mhoc python=3.10
-conda activate mhoc
-```
-_or:_
-```bash
-python3 -m venv mhoc
-source mhoc/bin/activate
-```
-
-### 3. Install Requirements  
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run Application  
-```bash
-python src/app/app.py
-```
-
-Local server: 
-👉 http://localhost:5000
-
----
-
-# 🚀 Deployment (Render)
-
-### Build  
-```
-pip install -r requirements.txt
-```
-
-### Start  
-```
-gunicorn "app.app:app" --chdir src --bind 0.0.0.0:$PORT --workers 2
-```
-
----
-
-# 🧪 Testing  
-```bash
-pytest -q
-```
-
----
-
-# 📘 Documentation  
-- docs/MODEL_CARD.md  
-- docs/ARCHITECTURE.md  
-- docs/API_REFERENCE.md  
-
----
-
-# 🧾 Citation  
-```
-D. Chandra et al.,
-"Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process,"
-IOP Conference Series: Materials Science and Engineering,
-Vol. 998, 012061, 2020.
-doi:10.1088/1757-899X/998/1/012061
-```
-
----
-
-# 👤 Author  
-**Dinesh Chandra — TheComputationalCore**
-
----
-
-# 🔒 License  
-MIT License
+MIT. See LICENSE.
