@@ -3,7 +3,7 @@ Utility functions for training pipelines.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 import pandas as pd
 import joblib
 
@@ -17,12 +17,13 @@ def save_model(model, path):
     print(f"Model saved to: {path}")
 
 
-def save_metadata(path, model_name, features, metrics):
+def save_metadata(path, model_name, features, metrics, validation=None):
     metadata = {
         "model_name": model_name,
-        "trained_on": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "trained_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "features": features,
-        "metrics": metrics
+        "metrics": metrics,
+        "validation": validation or {},
     }
     with open(path, "w") as f:
         json.dump(metadata, f, indent=4)

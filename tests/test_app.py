@@ -15,13 +15,10 @@ def test_api_predict_json():
     payload = {
         "Material": "EN-8",
         "Current": 140,
-        "Heat_Input": 0.864,
-        "Soaking_Time": 10,
-        "Carbon": 0.37,
-        "Manganese": 0.8
+        "Exposure_Time_h": 10
     }
     res = client.post("/api/v1/predict", data=json.dumps(payload),
                       content_type="application/json")
     assert res.status_code == 200
     data = res.get_json()
-    assert "hardness" in data and "oxidation" in data
+    assert "hardness" in data and "oxidation_areal_mass_gain_g_mm2" in data

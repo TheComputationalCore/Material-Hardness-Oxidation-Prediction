@@ -1,17 +1,28 @@
 {
-    "model_name": "Oxidation Model",
-    "trained_on": "2025-11-20 18:50:24",
+    "model_name": "Areal Oxidation Mass Gain Model",
+    "trained_at": "2026-10-28 18:53:51 UTC",
     "features": [
         "Material",
         "Current",
-        "Heat_Input",
-        "Soaking_Time",
-        "Carbon",
-        "Manganese"
+        "Exposure_Time_h"
     ],
     "metrics": {
-        "MAE": 8.240499999999315e-05,
-        "RMSE": 0.00010615269554853611,
-        "R2": 0.9975970282558465
+        "MAE": 0.0004400785185185204,
+        "RMSE": 0.0005115875518471284,
+        "R2": 0.9365391974962097
+    },
+    "validation": {
+        "method": "LeaveOneGroupOut",
+        "group": "Current",
+        "groups": [
+            120.0,
+            140.0,
+            160.0
+        ],
+        "n_samples": 18,
+        "n_validation_predictions": 18,
+        "final_fit_rows": 18,
+        "target": "Areal_Mass_Gain_g_mm2",
+        "target_unit": "g/mm^2; cumulative mass gain per exposed area, not time-normalized"
     }
 }

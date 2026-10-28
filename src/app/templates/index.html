@@ -1,14 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Material Hardness & Oxidation — Interactive Predictor</title>
-
-  <!-- Fonts + Plotly CDN -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stellite-6 Hardfacing Property Predictor</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
-
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script defer src="{{ url_for('static', filename='app.js') }}"></script>
 </head>
@@ -19,53 +15,40 @@
         <div class="brand">
           <div class="logo">MHOC</div>
           <div>
-            <h1>Material Hardness & Oxidation</h1>
-            <p class="muted">Interactive predictor — lightweight research demo</p>
+            <h1>Stellite-6 Hardfacing Predictor</h1>
+            <p class="muted">Exploratory model based on the published TIG surfacing study</p>
           </div>
         </div>
-
         <div class="controls">
-          <button id="theme-toggle" class="icon-btn" title="Toggle dark mode">🌓</button>
+          <button id="theme-toggle" class="icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode">🌓</button>
         </div>
       </div>
     </header>
 
     <main class="container grid">
-      <!-- form card -->
       <section class="card form-card">
-        <h2>Predict</h2>
-
+        <h2>Paper-tested conditions</h2>
         <form id="predict-form" novalidate>
-          <label>Material</label>
+          <label for="Material">Substrate</label>
           <select id="Material" name="Material" required>
             <option value="EN-8" {% if selected_material == "EN-8" %}selected{% endif %}>EN-8</option>
             <option value="Mild Steel" {% if selected_material == "Mild Steel" %}selected{% endif %}>Mild Steel</option>
           </select>
 
-          <div class="row">
-            <div class="col">
-              <label>Current (A)</label>
-              <input id="Current" name="Current" type="number" step="any" inputmode="decimal" placeholder="e.g. 140" value="{{ form_data.Current if form_data else '' }}" required>
-            </div>
-            <div class="col">
-              <label>Heat Input (kJ/mm)</label>
-              <input id="Heat_Input" name="Heat_Input" type="number" step="any" placeholder="e.g. 0.864" value="{{ form_data.Heat_Input if form_data else '' }}" required>
-            </div>
-          </div>
+          <label for="Current">Welding current (A)</label>
+          <select id="Current" name="Current" required>
+            {% for current in [120, 140, 160] %}
+            <option value="{{ current }}" {% if selected_current|string == current|string %}selected{% endif %}>{{ current }} A</option>
+            {% endfor %}
+          </select>
+          <p id="heat-input-note" class="muted">The paper varies current, travel speed, and heat input together.</p>
 
-          <div class="row">
-            <div class="col">
-              <label>Soaking Time (min)</label>
-              <input id="Soaking_Time" name="Soaking_Time" type="number" step="any" placeholder="e.g. 10" value="{{ form_data.Soaking_Time if form_data else '' }}" required>
-            </div>
-            <div class="col">
-              <label>Carbon (wt%)</label>
-              <input id="Carbon" name="Carbon" type="number" step="any" placeholder="e.g. 0.37" value="{{ form_data.Carbon if form_data else '' }}" required>
-            </div>
-          </div>
-
-          <label>Manganese (wt%)</label>
-          <input id="Manganese" name="Manganese" type="number" step="any" placeholder="e.g. 0.8" value="{{ form_data.Manganese if form_data else '' }}" required>
+          <label for="Exposure_Time_h">Oxidation exposure (hours)</label>
+          <select id="Exposure_Time_h" name="Exposure_Time_h" required>
+            {% for exposure in [5, 10, 15] %}
+            <option value="{{ exposure }}" {% if selected_exposure|string == exposure|string %}selected{% endif %}>{{ exposure }} hours</option>
+            {% endfor %}
+          </select>
 
           <div class="actions">
             <button id="predict-btn" class="btn primary" type="submit">
@@ -75,68 +58,45 @@
             <button id="reset-btn" class="btn outline" type="button">Reset</button>
           </div>
         </form>
-
-        <!-- toast place -->
         <div id="toast" class="toast" style="display:none"></div>
       </section>
 
-      <!-- results & visualizations -->
       <aside class="card results-card">
-        <div class="results-header">
-          <h3>Results</h3>
-          <div class="result-actions">
-            <button id="copy-btn" class="icon-btn" title="Copy results">📋</button>
-            <button id="retrain-info" class="icon-btn" title="Model info">ℹ️</button>
-          </div>
-        </div>
-
+        <div class="results-header"><h3>Predictions</h3></div>
         <div id="results-area" class="results-area">
-          {% if hardness or oxidation or hardness_error or oxidation_error %}
-            <div class="result-item">
-              {% if hardness %}
-                <div class="result-row"><strong>Predicted Hardness:</strong> <span id="hardness-value">{{ hardness }}</span></div>
-              {% endif %}
-              {% if oxidation %}
-                <div class="result-row"><strong>Predicted Oxidation Rate:</strong> <span id="oxidation-value">{{ oxidation }}</span></div>
-              {% endif %}
-              {% if hardness_error %}
-                <div class="error">Error: {{ hardness_error }}</div>
-              {% endif %}
-              {% if oxidation_error %}
-                <div class="error">Error: {{ oxidation_error }}</div>
-              {% endif %}
-            </div>
+          {% if (hardness is defined and hardness is not none) or (oxidation is defined and oxidation is not none) or hardness_error or oxidation_error %}
+          <div class="result-item">
+            {% if hardness is defined and hardness is not none %}
+            <div class="result-row"><strong>Hardness:</strong> <span id="hardness-value">{{ "%.2f"|format(hardness) }}</span></div>
+            {% endif %}
+            {% if oxidation is defined and oxidation is not none %}
+            <div class="result-row"><strong>Areal mass gain:</strong> <span id="oxidation-value">{{ "%.6f"|format(oxidation) }} g/mm²</span></div>
+            {% endif %}
+            {% if hardness_error %}<div class="error">Hardness error: {{ hardness_error }}</div>{% endif %}
+            {% if oxidation_error %}<div class="error">Oxidation error: {{ oxidation_error }}</div>{% endif %}
+          </div>
           {% else %}
-            <div class="muted">No predictions yet. Fill inputs and click <strong>Predict</strong>.</div>
+          <div class="muted">Choose one of the published material, current, and exposure conditions to view model predictions.</div>
           {% endif %}
         </div>
-
-        <div id="viz" class="viz">
-          <!-- Plotly chart will be injected here -->
-        </div>
-
-        <div class="meta">
-          <p class="muted">Models: LinearRegression (Hardness) & RandomForest (Oxidation). Use for exploratory research only.</p>
-        </div>
+        <p class="muted">Hardness is reported as a Vickers hardness number; the paper does not state the test load. Oxidation is cumulative mass gain per exposed area, not a time-normalized rate.</p>
+        <p class="muted">Predictions are limited to conditions represented in the paper and are for exploration, not operational decisions.</p>
       </aside>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <small>Material Hardness & Oxidation Predictor • <a href="https://github.com/TheComputationalCore/material-hardness-oxidation-prediction" target="_blank">Repo</a></small>
+        <small>Source: Chandra et al. (2020), <a href="https://doi.org/10.1088/1757-899X/998/1/012061" target="_blank" rel="noopener noreferrer">IOP Conference Series 998, 012061</a></small>
       </div>
     </footer>
   </div>
-
-  <!-- Server-provided values (for initial render) -->
   <script>
-  window.__INITIAL__ = {
-    hardness: {{ (hardness | default(None)) | tojson }},
-    oxidation: {{ (oxidation | default(None)) | tojson }},
-    hardness_error: {{ (hardness_error | default(None)) | tojson }},
-    oxidation_error: {{ (oxidation_error | default(None)) | tojson }}
-  }
-</script>
-
+    window.__INITIAL__ = {
+      hardness: {{ (hardness | default(None)) | tojson }},
+      oxidation: {{ (oxidation | default(None)) | tojson }},
+      hardness_error: {{ (hardness_error | default(None)) | tojson }},
+      oxidation_error: {{ (oxidation_error | default(None)) | tojson }}
+    };
+  </script>
 </body>
 </html>

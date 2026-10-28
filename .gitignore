@@ -18,6 +18,5 @@ env/
 *.log
 *.tmp
 
-# Exclude large data files (if any in the future)
-*.csv
+# Model artifacts are versioned for deployment; keep CSV datasets reviewable too.
 models/*.joblib

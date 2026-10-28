@@ -1,17 +1,7 @@
-Material,Current,Heat_Input,Carbon,Manganese,Hardness
-EN-8,120,0.8,0.37,0.8,331
-EN-8,125,0.816,0.37,0.8,339.5
-EN-8,130,0.832,0.37,0.8,348
-EN-8,135,0.848,0.37,0.8,356.5
-EN-8,140,0.864,0.37,0.8,365
-EN-8,145,0.888,0.37,0.8,366.5
-EN-8,150,0.912,0.37,0.8,368
-EN-8,155,0.912,0.37,0.8,369.5
-Mild Steel,120,0.8,0.23,1.0,310
-Mild Steel,125,0.816,0.23,1.0,320.75
-Mild Steel,130,0.832,0.23,1.0,331.5
-Mild Steel,135,0.848,0.23,1.0,342.25
-Mild Steel,140,0.864,0.23,1.0,353
-Mild Steel,145,0.888,0.23,1.0,355
-Mild Steel,150,0.912,0.23,1.0,357
-Mild Steel,155,0.912,0.23,1.0,359
+Material,Current,Heat_Input,Carbon,Manganese,Hardness,Hardness_Unit,Source,Source_Table,Data_Status
+EN-8,120,0.8,0.37,0.8,331,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 6,reported_paper_measurement
+EN-8,140,0.864,0.37,0.8,365,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 6,reported_paper_measurement
+EN-8,160,0.912,0.37,0.8,371,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 6,reported_paper_measurement
+Mild Steel,120,0.8,0.23,1.0,310,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 5,reported_paper_measurement
+Mild Steel,140,0.864,0.23,1.0,353,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 5,reported_paper_measurement
+Mild Steel,160,0.912,0.23,1.0,361,"Vickers hardness number; test load not reported",Chandra et al. (2020) DOI 10.1088/1757-899X/998/1/012061,Table 5,reported_paper_measurement
