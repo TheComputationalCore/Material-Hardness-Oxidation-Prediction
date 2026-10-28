@@ -1,79 +1,221 @@
-# Stellite-6 Hardfacing Property Predictor
+# Material Hardness & Oxidation Prediction
 
-An exploratory Flask application and scikit-learn models based on the experimental results in:
+<p align="center">
+  <strong>A paper-grounded machine-learning demonstration for Stellite-6 TIG hardfacing</strong>
+</p>
 
-> C. Dinesh Chandra, B. Rushikesh, Mohammed Numan, and B. Venkatesh, “Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process,” IOP Conference Series: Materials Science and Engineering 998 (2020), 012061. [DOI: 10.1088/1757-899X/998/1/012061](https://doi.org/10.1088/1757-899X/998/1/012061).
+<p align="center">
+  <a href="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions/workflows/ci.yml"><img src="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
+  <img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white" alt="Python 3.10">
+  <img src="https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white" alt="Flask 3.0">
+  <img src="https://img.shields.io/badge/scikit--learn-1.3-F7931E?logo=scikitlearn&logoColor=white" alt="scikit-learn 1.3">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-3DA639.svg" alt="MIT License"></a>
+</p>
 
-The paper studies Stellite-6 TIG hardfacing on EN-8 and mild steel. This application models the paper's reported hardness and cumulative oxidation mass gain per exposed area. Its purpose is to demonstrate a small, traceable ML workflow; the available measurements are not enough to establish broad predictive generalization.
+> **Research scope:** This project reproduces and explores the measurements in one published experiment. It is not an independently validated engineering predictor. The paper reports only six hardness values and eighteen oxidation values, with no replicate-level measurements or uncertainty estimates.
 
-## Experimental scope and data
+## Live application
 
-Training data contain only the values reported in the paper's tables:
+Try the [Stellite-6 Hardfacing Property Predictor](https://material-hardness-oxidation-prediction.onrender.com/). Select a paper-tested substrate, welding current, and oxidation exposure time to view the model estimates.
 
-- Hardness: six values across two substrates and three welding currents (Tables 5–6).
-- Oxidation: eighteen values across two substrates, three currents, and 5, 10, and 15 hour exposures (Tables 8–13).
-- Current settings are 120, 140, and 160 A. Their corresponding paper conditions include heat inputs of 0.800, 0.864, and 0.912 kJ/mm and changing travel speeds. These variables are coupled in the experiment.
-- Oxidation is tested at 973 K (700 °C). The target is cumulative mass gain divided by exposed area (g/mm²), not a rate divided by time.
+The free Render service can spin down while idle, so the first request after inactivity may take longer to load.
 
-See data/README.md for row provenance, target definitions, and the paper's sign-convention note. Interpolated values are not included as training measurements.
+## What this project does
 
-## Models and validation
+The application uses the reported results from Chandra et al. (2020) to demonstrate a traceable machine-learning workflow for two targets:
 
-| Prediction | Features | Estimator |
+| Target | Reported data | Model inputs | Model |
+|---|---:|---|---|
+| Hardness | 6 values | Substrate, welding current | Linear regression |
+| Oxidation | 18 values | Substrate, welding current, exposure hours | Random forest regression |
+
+The browser interface returns both outputs. The JSON API also returns both outputs and rejects inputs outside the conditions represented in the paper.
+
+## Scientific source
+
+The source experiment is:
+
+> C. Dinesh Chandra, B. Rushikesh, Mohammed Numan, and B. Venkatesh, “Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process,” *IOP Conference Series: Materials Science and Engineering*, vol. 998 (2020), 012061. [https://doi.org/10.1088/1757-899X/998/1/012061](https://doi.org/10.1088/1757-899X/998/1/012061)
+
+The experiment deposited Stellite-6 onto EN-8 and mild-steel substrates by TIG surfacing. Welding current, travel speed, and heat input changed together in the reported schedule; the dataset therefore cannot isolate a causal effect of current alone.
+
+### Paper-tested conditions
+
+| Input | Supported values | Notes |
 |---|---|---|
-| Hardness number | Substrate, welding current | Linear regression |
-| Cumulative areal mass gain | Substrate, welding current, exposure hours | Random forest regression |
+| Substrate | EN-8; Mild Steel | Two substrates reported in the paper |
+| Welding current | 120, 140, 160 A | Corresponding heat inputs are 0.800, 0.864, 0.912 kJ/mm; travel speeds also change with the schedule |
+| Oxidation exposure | 5, 10, 15 hours | Oxidation test temperature is 973 K (700 °C) |
 
-Categorical substrate is one-hot encoded and numeric inputs are standardized. Validation uses Leave-One-Group-Out with current as the group, so both substrates and all oxidation times at one current are held out together. The saved deployment model is then refit on all reported paper rows. There are only three current groups; two folds require predicting beyond the remaining current range.
+Hardness is reported as a Vickers hardness number, but the paper does not state the test load alongside the tabulated values. The oxidation target is the paper’s reported mass change divided by exposed area, in g/mm². It is cumulative areal mass gain, **not** a time-normalized rate.
 
-Grouped validation gives hardness MAE 26.25, RMSE 27.51, and R² -0.656; oxidation MAE 0.000440 g/mm², RMSE 0.000512 g/mm², and R² 0.937. The negative hardness R² indicates that the current linear model does not generalize well when a whole current level is withheld. These are limited diagnostics, not evidence of performance on new specimens.
+The paper appears to print the oxidation mass-change subtraction in reverse order (pre-test weight minus post-test weight). The dataset preserves the values as reported and documents the sign issue; it does not guess a correction without the original lab records. See [data/README.md](data/README.md) for row-level provenance and units.
 
-The application accepts only the materials, currents, and exposure times represented in the paper. This does not make a prediction experimentally validated; use the output for exploration and verify it against new measurements before operational use.
+## Dataset and provenance
+
+The checked-in training datasets contain only the table values reported in the paper:
+
+- [`data/hardness.csv`](data/hardness.csv): 6 rows from Tables 5 and 6 (2 substrates × 3 currents).
+- [`data/oxidation.csv`](data/oxidation.csv): 18 rows from Tables 8–13 (2 substrates × 3 currents × 3 exposure times).
+- [`data/README.md`](data/README.md): source tables, units, scope, and data-status policy.
+
+Every training row is marked `reported_paper_measurement`. Training scripts reject rows with a different status. Interpolated values are not independent experiments and are not included as training measurements. The paper does not provide specimen-level replicates or measurement uncertainty.
+
+## Models and evaluation
+
+### Pipelines
+
+Both models use a scikit-learn preprocessing pipeline. Substrate is one-hot encoded; numeric inputs are standardized.
+
+- **Hardness:** linear regression on substrate and current.
+- **Oxidation:** a 300-tree random forest on substrate, current, and exposure hours (`random_state=42`).
+
+### Grouped validation results
+
+Validation uses **Leave-One-Group-Out**, with welding current as the group. Each fold holds out all observations at one current, including both substrates and, for oxidation, all three exposure times. After validation, the saved deployment pipeline is refit on all reported paper rows.
+
+| Target | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Hardness number | 26.25 | 27.51 | -0.656 |
+| Areal mass gain (g/mm²) | 0.000440 | 0.000512 | 0.937 |
+
+There are only **three current groups**. Two folds require predicting beyond the current range in that fold’s training data. The negative hardness R² indicates that the current hardness model generalizes poorly when a whole current level is withheld. The oxidation score is encouraging as a small-data diagnostic, but it is still based on only three groups and does not establish performance on new specimens.
+
+The reported cross-validation metrics are not the same as testing the final saved pipeline on an independent experiment: the deployable model is trained on all six or eighteen reported rows. Predictions at the paper’s conditions should therefore be treated as model estimates, not independent validation results.
+
+### Why older scores may differ
+
+An earlier project version included interpolated/derived rows and evaluated a random row split. Nearby values from the same experimental trend could then appear in both training and test sets, producing an optimistic score. The current workflow retains only measurements reported in the paper and holds out entire current groups. The two scores answer different questions and should not be compared as if they were the same evaluation.
+
+## Application and API
+
+### Browser interface
+
+The interface provides selectors for substrate, current, and exposure time; displays hardness and cumulative areal mass-gain estimates; and reports the paper-tested schedule for heat input and travel speed. Inputs are restricted to values represented in the experiment.
+
+### JSON API
+
+`POST /api/v1/predict`
+
+Example request:
+
+```json
+{
+  "Material": "EN-8",
+  "Current": 140,
+  "Exposure_Time_h": 10
+}
+```
+
+Example response:
+
+```json
+{
+  "hardness": 365.0,
+  "hardness_error": null,
+  "oxidation_areal_mass_gain_g_mm2": 0.004592,
+  "oxidation_error": null,
+  "oxidation_target_definition": "cumulative mass gain per exposed area; g/mm^2; not time-normalized"
+}
+```
+
+Allowed values are `Material`: `EN-8` or `Mild Steel`; `Current`: `120`, `140`, or `160`; and `Exposure_Time_h`: `5`, `10`, or `15`. A non-object JSON body or an unsupported/missing/non-finite input returns HTTP 400. See [docs/API_REFERENCE.md](docs/API_REFERENCE.md) for the full contract.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    D[Paper tables<br/>6 hardness · 18 oxidation] --> T[Training and grouped evaluation]
+    T --> M[Saved scikit-learn pipelines]
+    U[Browser form] --> V[Input validation]
+    A[JSON client] --> V
+    V --> I[Inference wrappers]
+    M --> I
+    I --> R[Hardness and areal mass-gain estimates]
+```
+
+| Path | Purpose |
+|---|---|
+| `data/` | Paper-transcribed CSVs and dataset provenance |
+| `docs/` | Model card, architecture, and API reference |
+| `models/` | Saved model metadata and fitted artifacts generated by training |
+| `src/models/` | Feature pipelines, model training, and grouped evaluation |
+| `src/inference/` | Artifact loading and paper-condition validation |
+| `src/app/` | Flask application, routes, templates, and static assets |
+| `tests/` | App and inference checks |
+| `.github/workflows/ci.yml` | Training, lint, and test workflow |
+| `render.yaml`, `Procfile` | Render and Gunicorn deployment configuration |
+
+More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/MODEL_CARD.md](docs/MODEL_CARD.md), and [docs/API_REFERENCE.md](docs/API_REFERENCE.md).
 
 ## Run locally
 
-    python3 -m venv .venv
-    source .venv/bin/activate
-    pip install -r requirements.txt
-    python -m src.app.app
+Use Python 3.10, matching the CI and Render runtime.
 
-Open http://localhost:5001.
+```bash
+git clone https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction.git
+cd Material-Hardness-Oxidation-Prediction
 
-To reproduce grouped validation and refresh the saved models:
+python3.10 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
 
-    python -m src.models.train_hardness
-    python -m src.models.train_oxidation
+python -m src.app.app
+```
 
-To calculate grouped validation metrics without saving models:
+Open [http://localhost:5001](http://localhost:5001).
 
-    python -m src.models.evaluate
+## Reproduce training and evaluation
 
-## API
+Train each model and regenerate its metadata:
 
-POST /api/v1/predict accepts a JSON object:
+```bash
+python -m src.models.train_hardness
+python -m src.models.train_oxidation
+```
 
-    {
-      "Material": "EN-8",
-      "Current": 140,
-      "Exposure_Time_h": 10
-    }
+Report grouped evaluation metrics without rewriting the saved artifacts:
 
-The response contains hardness, oxidation_areal_mass_gain_g_mm2, and validation errors. Oxidation is cumulative mass gain per exposed area in g/mm². Invalid input returns HTTP 400. See docs/API_REFERENCE.md for details.
+```bash
+python -m src.models.evaluate
+```
 
-## Project layout
+Install development dependencies and run the repository checks:
 
-- data/: paper-transcribed training rows and provenance
-- docs/: model card, architecture, and API reference
-- models/: fitted sklearn pipelines and metadata
-- src/models/: preprocessing, training, grouped evaluation
-- src/inference/: model loading and condition validation
-- src/app/: Flask routes and interface
-- tests/: lightweight application and inference checks
+```bash
+pip install -r requirements-dev.txt
+ruff check .
+pytest -q
+```
+
+The GitHub Actions workflow trains both models, runs Ruff, and runs the tests on pull requests to `main` and pushes to `main`.
 
 ## Deployment
 
-The repository includes Render configuration in render.yaml and a Gunicorn Procfile. Install dependencies from requirements.txt and run the factory with Gunicorn.
+The service is deployed on Render from the `main` branch. Configuration is in [`render.yaml`](render.yaml); the start command uses Gunicorn with the Flask application factory. The service uses Python 3.10.13 and installs dependencies from `requirements.txt`.
+
+## Responsible interpretation
+
+- Use this project to reproduce the reported paper table and demonstrate a small ML workflow.
+- Do not interpret the models as validated on independent specimens; no such validation data are available in the paper.
+- Do not use the outputs for production control, safety decisions, or process optimization.
+- Do not infer that current alone causes a hardness or oxidation change; current, travel speed, and heat input vary together.
+- Do not apply the models to other substrates, processes, temperatures, or settings.
+- New experimental records should retain specimen-level measurements, provenance, units, test conditions, and a distinct data-status label. Do not relabel interpolated values as measurements.
+
+## Citation
+
+If you use this project, cite the experimental paper that provides its training data:
+
+```text
+Chandra, C. D., Rushikesh, B., Numan, M., & Venkatesh, B. (2020).
+Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials
+by TIG Surfacing Process. IOP Conference Series: Materials Science and
+Engineering, 998, 012061.
+https://doi.org/10.1088/1757-899X/998/1/012061
+```
 
 ## License
 
-MIT. See LICENSE.
+This project is distributed under the [MIT License](LICENSE).
