@@ -1,0 +1,44 @@
+{
+    "schema_version": "1.0",
+    "baseline_id": "0.3.0",
+    "supersedes": "0.1.0",
+    "captured_at": "2026-10-29",
+    "captured_from_commit": "05cd0620c0a6675309e5ffb565877696abb31aea",
+    "note": "Hardness is unchanged from 0.1.0. Oxidation now uses the linear rate model adopted after the fair benchmark; the pre-adoption random-forest results remain in reports/benchmark/pre_adoption_random_forest/ and reports/reproducibility/baseline_0.1.0.json. Any intentional model change must update this file in the same commit that updates the benchmark and model card.",
+    "protocol": {
+        "hardness": "LeaveOneGroupOut grouped by Current; refit on all six rows for deployment",
+        "oxidation": "LeaveOneGroupOut grouped by Current; refit on all eighteen rows for deployment"
+    },
+    "datasets": {
+        "data/hardness.csv": "1d83be25aa4b59453bc24b816c7f6267be0e0b7480bc8fc2a394fba9d6745a60",
+        "data/oxidation.csv": "be5edafcebde4ada00ba3578df623b84953f79ed030f109f20cfdf9ade6f820b"
+    },
+    "metrics": {
+        "hardness": {
+            "MAE": 26.25,
+            "RMSE": 27.514768761521513,
+            "R2": -0.655686167304538
+        },
+        "oxidation": {
+            "MAE": 0.00013455555555555562,
+            "RMSE": 0.00016306622622665466,
+            "R2": 0.9935524656589708
+        }
+    },
+    "adoption": {
+        "target": "oxidation",
+        "adopted_model": "rate_linear",
+        "previous_model": "random_forest",
+        "previous_MAE": 0.0004400785185185204,
+        "new_MAE": 0.00013455555555555562,
+        "relative_improvement": 0.6942464812676538,
+        "folds_improved": 3,
+        "n_folds": 3,
+        "rule": "Adopt only if primary LOCO MAE improves >= 20%, at least 2 of 3 folds improve, and secondary LOGO MAE does not worsen by more than 10%.",
+        "evidence": "reports/benchmark/pre_adoption_random_forest/selection.json"
+    },
+    "tolerance": {
+        "absolute": 1e-12,
+        "relative": 1e-09
+    }
+}

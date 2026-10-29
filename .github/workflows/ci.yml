@@ -28,14 +28,32 @@ jobs:
       - name: Add project to PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
 
-      - name: Train Hardness Model
-        run: python src/models/train_hardness.py
+      - name: Audit source tables
+        run: python -m src.data.audit
 
-      - name: Train Oxidation Model
-        run: python src/models/train_oxidation.py
+      - name: Train hardness model
+        run: python -m src.models.train_hardness
+
+      - name: Train oxidation model
+        run: python -m src.models.train_oxidation
+
+      - name: Calibrate intervals
+        run: python -m src.models.calibration
+
+      - name: Verify reproducibility baseline
+        run: python -m src.models.reproducibility
+
+      - name: Run fair model benchmark
+        run: python -m src.models.benchmark
+
+      - name: Validate external measurement files
+        run: python -m src.models.external_validation
 
       - name: Lint with ruff
         run: ruff check .
+
+      - name: Check formatting
+        run: ruff format --check .
 
       - name: Run tests
         run: pytest -q

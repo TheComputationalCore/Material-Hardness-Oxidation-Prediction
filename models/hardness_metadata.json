@@ -1,6 +1,7 @@
 {
     "model_name": "Hardness Model",
-    "trained_at": "2026-10-28 18:53:46 UTC",
+    "model_version": "0.2.0",
+    "trained_at": "2026-10-29 05:52:34 UTC",
     "features": [
         "Material",
         "Current"
@@ -21,6 +22,8 @@
         "n_samples": 6,
         "n_validation_predictions": 6,
         "final_fit_rows": 6,
+        "effective_independent_observations": 6,
+        "leakage_control": "Every row at the held-out current is excluded from that fold's fit; no interpolated or derived rows are present.",
         "target": "Hardness",
         "target_unit": "Vickers hardness number; test load not reported in source paper"
     }

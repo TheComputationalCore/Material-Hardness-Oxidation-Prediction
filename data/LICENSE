@@ -1,0 +1,24 @@
+The data files in this directory (hardness.csv, oxidation.csv, and
+source_tables.json) are transcribed from:
+
+  C. Dinesh Chandra, B. Rushikesh, Mohammed Numan, and B. Venkatesh,
+  "Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by
+  TIG Surfacing Process," IOP Conference Series: Materials Science and
+  Engineering 998 (2020) 012061.
+  https://doi.org/10.1088/1757-899X/998/1/012061
+
+The source article is distributed under the Creative Commons Attribution 3.0
+Unported License (CC BY 3.0):
+
+  https://creativecommons.org/licenses/by/3.0/
+
+The transcribed tables and source-value notes in this directory are distributed
+under the same license. You must give appropriate credit to the original authors,
+provide a link to the license, and indicate if changes were made.
+
+The project's source code is licensed separately under the MIT License; see the
+LICENSE file in the repository root.
+
+The project does not claim ownership of the experimental measurements. It
+preserves the printed values and records unresolved unit, sign, and provenance
+questions in data/README.md and docs/SOURCE_AUDIT.md.

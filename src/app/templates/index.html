@@ -16,7 +16,7 @@
           <div class="logo">MHOC</div>
           <div>
             <h1>Stellite-6 Hardfacing Predictor</h1>
-            <p class="muted">Exploratory model based on the published TIG surfacing study</p>
+            <p class="muted">Exploratory model based on one published TIG surfacing study</p>
           </div>
         </div>
         <div class="controls">
@@ -28,7 +28,7 @@
     <main class="container grid">
       <section class="card form-card">
         <h2>Paper-tested conditions</h2>
-        <form id="predict-form" novalidate>
+        <form id="predict-form" action="/predict" method="post" novalidate>
           <label for="Material">Substrate</label>
           <select id="Material" name="Material" required>
             <option value="EN-8" {% if selected_material == "EN-8" %}selected{% endif %}>EN-8</option>
@@ -62,31 +62,81 @@
       </section>
 
       <aside class="card results-card">
-        <div class="results-header"><h3>Predictions</h3></div>
+        <div class="results-header">
+          <h3>Predictions</h3>
+          <button id="copy-btn" class="icon-btn" title="Copy results" aria-label="Copy results">⧉</button>
+        </div>
         <div id="results-area" class="results-area">
           {% if (hardness is defined and hardness is not none) or (oxidation is defined and oxidation is not none) or hardness_error or oxidation_error %}
           <div class="result-item">
             {% if hardness is defined and hardness is not none %}
-            <div class="result-row"><strong>Hardness:</strong> <span id="hardness-value">{{ "%.2f"|format(hardness) }}</span></div>
+            <div class="result-row">
+              <strong>Hardness:</strong> <span id="hardness-value">{{ "%.2f"|format(hardness) }}</span>
+              {% if hardness_meta is defined and hardness_meta.interval %}
+              <div class="result-meta">90% empirical interval:
+                {{ "%.1f"|format(hardness_meta.interval.lower) }}–{{ "%.1f"|format(hardness_meta.interval.upper) }}
+              </div>
+              {% endif %}
+              {% if hardness_meta is defined and hardness_meta.applicability %}
+              <div class="result-meta">
+                {{ hardness_meta.applicability.explanation }}
+                {% if hardness_meta.applicability.measured_value is not none %}
+                Paper-reported value at this condition:
+                <span id="hardness-measured">{{ "%.2f"|format(hardness_meta.applicability.measured_value) }}</span>
+                ({{ hardness_meta.applicability.measured_source_table }}).
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
             {% endif %}
             {% if oxidation is defined and oxidation is not none %}
-            <div class="result-row"><strong>Areal mass gain:</strong> <span id="oxidation-value">{{ "%.6f"|format(oxidation) }} g/mm²</span></div>
+            <div class="result-row">
+              <strong>Areal mass gain:</strong> <span id="oxidation-value">{{ "%.6f"|format(oxidation) }}</span> g/mm²
+              {% if oxidation_meta is defined and oxidation_meta.interval %}
+              <div class="result-meta">90% empirical interval:
+                {{ "%.6f"|format(oxidation_meta.interval.lower) }}–{{ "%.6f"|format(oxidation_meta.interval.upper) }} g/mm²
+              </div>
+              {% endif %}
+              {% if oxidation_meta is defined and oxidation_meta.applicability %}
+              <div class="result-meta">
+                {{ oxidation_meta.applicability.explanation }}
+                {% if oxidation_meta.applicability.measured_value is not none %}
+                Paper-reported value at this condition:
+                <span id="oxidation-measured">{{ "%.6f"|format(oxidation_meta.applicability.measured_value) }}</span> g/mm²
+                ({{ oxidation_meta.applicability.measured_source_table }}).
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
             {% endif %}
             {% if hardness_error %}<div class="error">Hardness error: {{ hardness_error }}</div>{% endif %}
             {% if oxidation_error %}<div class="error">Oxidation error: {{ oxidation_error }}</div>{% endif %}
           </div>
+          {% if warnings is defined and warnings %}
+          <ul class="warning-list">
+            {% for warning in warnings %}<li>{{ warning }}</li>{% endfor %}
+          </ul>
+          {% endif %}
           {% else %}
-          <div class="muted">Choose one of the published material, current, and exposure conditions to view model predictions.</div>
+          <div class="muted">Choose one of the published material, current, and exposure conditions to view model estimates.</div>
           {% endif %}
         </div>
-        <p class="muted">Hardness is reported as a Vickers hardness number; the paper does not state the test load. Oxidation is cumulative mass gain per exposed area, not a time-normalized rate.</p>
-        <p class="muted">Predictions are limited to conditions represented in the paper and are for exploration, not operational decisions.</p>
+
+        <p class="muted">Hardness is a Vickers hardness number; the paper does not state the test load. Oxidation is cumulative mass gain per exposed area as printed, not a time-normalized rate.</p>
+        <p class="muted">Estimates are exploratory and are not valid outside the paper-tested conditions.</p>
+
+        <details id="model-info" class="model-info">
+          <summary>Model details and limitations</summary>
+          <div id="model-info-body"><p class="muted">Loading model details…</p></div>
+        </details>
       </aside>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <small>Source: Chandra et al. (2020), <a href="https://doi.org/10.1088/1757-899X/998/1/012061" target="_blank" rel="noopener noreferrer">IOP Conference Series 998, 012061</a></small>
+        <small>Source: Chandra et al. (2020),
+          <a href="https://doi.org/10.1088/1757-899X/998/1/012061" target="_blank" rel="noopener noreferrer">IOP Conference Series 998, 012061</a>.
+          Data transcription and audit notes are in the repository.</small>
       </div>
     </footer>
   </div>
@@ -95,7 +145,10 @@
       hardness: {{ (hardness | default(None)) | tojson }},
       oxidation: {{ (oxidation | default(None)) | tojson }},
       hardness_error: {{ (hardness_error | default(None)) | tojson }},
-      oxidation_error: {{ (oxidation_error | default(None)) | tojson }}
+      oxidation_error: {{ (oxidation_error | default(None)) | tojson }},
+      hardness_meta: {{ (hardness_meta | default(None)) | tojson }},
+      oxidation_meta: {{ (oxidation_meta | default(None)) | tojson }},
+      warnings: {{ (warnings | default([])) | tojson }}
     };
   </script>
 </body>

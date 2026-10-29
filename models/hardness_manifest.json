@@ -1,0 +1,131 @@
+{
+    "manifest_schema_version": "1.0",
+    "model_name": "Hardness Model",
+    "model_version": "0.2.0",
+    "created_at": "2026-10-29 05:52:34 UTC",
+    "artifact": {
+        "path": "models/hardness_model.joblib",
+        "sha256": "9585e182de7c57bfb44b39923ae1257a6d4b46c0170046299c9264aa4fac98f3",
+        "bytes": 3086
+    },
+    "dataset": {
+        "path": "data/hardness.csv",
+        "kind": "hardness",
+        "sha256": "1d83be25aa4b59453bc24b816c7f6267be0e0b7480bc8fc2a394fba9d6745a60",
+        "rows": 6
+    },
+    "config": {
+        "class": "Pipeline",
+        "params": {
+            "memory": null,
+            "steps": [
+                [
+                    "preprocess",
+                    "ColumnTransformer(transformers=[('cat',\n                                 OneHotEncoder(dtype=<class 'float'>,\n                                               handle_unknown='ignore',\n                                               sparse_output=False),\n                                 ['Material']),\n                                ('num', StandardScaler(), ['Current'])])"
+                ],
+                [
+                    "model",
+                    "LinearRegression()"
+                ]
+            ],
+            "verbose": false
+        },
+        "steps": [
+            {
+                "name": "preprocess",
+                "class": "ColumnTransformer",
+                "params": {
+                    "n_jobs": null,
+                    "remainder": "drop",
+                    "sparse_threshold": 0.3,
+                    "transformer_weights": null,
+                    "transformers": [
+                        [
+                            "cat",
+                            "OneHotEncoder(dtype=<class 'float'>, handle_unknown='ignore',\n              sparse_output=False)",
+                            [
+                                "Material"
+                            ]
+                        ],
+                        [
+                            "num",
+                            "StandardScaler()",
+                            [
+                                "Current"
+                            ]
+                        ]
+                    ],
+                    "verbose": false,
+                    "verbose_feature_names_out": true
+                }
+            },
+            {
+                "name": "model",
+                "class": "LinearRegression",
+                "params": {
+                    "copy_X": true,
+                    "fit_intercept": true,
+                    "n_jobs": null,
+                    "positive": false
+                }
+            }
+        ]
+    },
+    "seed": null,
+    "features": [
+        "Material",
+        "Current"
+    ],
+    "target": {
+        "column": "Hardness",
+        "definition": "Vickers hardness number as tabulated; the paper does not report the test load."
+    },
+    "metrics": {
+        "MAE": 26.25,
+        "RMSE": 27.514768761521513,
+        "R2": -0.655686167304538
+    },
+    "validation": {
+        "method": "LeaveOneGroupOut",
+        "group": "Current",
+        "groups": [
+            120.0,
+            140.0,
+            160.0
+        ],
+        "n_samples": 6,
+        "n_validation_predictions": 6,
+        "final_fit_rows": 6,
+        "effective_independent_observations": 6,
+        "leakage_control": "Every row at the held-out current is excluded from that fold's fit; no interpolated or derived rows are present.",
+        "target": "Hardness",
+        "target_unit": "Vickers hardness number; test load not reported in source paper"
+    },
+    "environment": {
+        "python": "3.10.17",
+        "implementation": "CPython",
+        "platform": "macOS-26.3-arm64-arm-64bit",
+        "packages": {
+            "Flask": "3.0.0",
+            "gunicorn": "21.2.0",
+            "numpy": "1.26.4",
+            "pandas": "2.2.0",
+            "scikit-learn": "1.3.2",
+            "joblib": "1.3.2"
+        },
+        "scikit_learn_version": "1.3.2"
+    },
+    "git": {
+        "commit": "05cd0620c0a6675309e5ffb565877696abb31aea",
+        "branch": "main",
+        "describe": "v1.0.0-40-g05cd062-dirty",
+        "dirty": true
+    },
+    "known_limitations": [
+        "Six reported table values from one study; no replicate hardness measurements.",
+        "Current, travel speed, and heat input vary together, so their effects are not separable.",
+        "Validation leaves out an entire welding current; it is a stress test, not evidence for new currents or new substrates.",
+        "Predictions are only defined at the paper-tested materials and currents.",
+        "See docs/MODEL_CARD.md and docs/SOURCE_AUDIT.md for the full limitations."
+    ]
+}

@@ -1,0 +1,180 @@
+{
+  "paper": {
+    "title": "Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process",
+    "authors": [
+      "C Dinesh Chandra",
+      "B Rushikesh",
+      "Mohammed Numan",
+      "B Venkatesh"
+    ],
+    "venue": "IOP Conference Series: Materials Science and Engineering 998 (2020) 012061",
+    "doi": "10.1088/1757-899X/998/1/012061",
+    "license": "CC BY 3.0",
+    "source_copies": {
+      "author_supplied": {
+        "path": "Dinesh_IOP_Conf._Ser._Mater._Sci._Eng._998_012061.pdf",
+        "sha256": "07f3f8f94732cdf908ff8ce1cacf20edb107edd82a47be21c60073a3712ca06f"
+      },
+      "retrieved_open_access": {
+        "url": "https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061/pdf",
+        "sha256": "7c199106eb974de26d0d806a6d2f5531dd1128bacd28cfbd618020ec195cb6be"
+      }
+    },
+    "copy_comparison": "All tabulated values and both oxidation equations agree between the two copies; the PDFs differ only in rendering/build metadata."
+  },
+  "process_schedule": {
+    "table": "Table 1",
+    "voltage_v": 15.0,
+    "current_a": [120.0, 140.0, 160.0],
+    "weld_speed_mm_s": [2.25, 2.43, 2.63],
+    "argon_pressure_kg_cm2": 5.0,
+    "heat_input_kj_mm": [0.8, 0.864, 0.912],
+    "heat_input_equation": "Q = V * I / v (no arc-efficiency factor reproduces the printed values)",
+    "collinearity_note": "Current, travel speed, and heat input are a one-factor schedule: all three change together and cannot be separated from these data.",
+    "deposition": "Stellite-6 rod, 3.2 mm diameter, one 1 mm thick layer; plates 60 x 30 x 6 mm; oil quenched immediately after hardfacing."
+  },
+  "substrate_composition": {
+    "table": "Tables 2 and 3",
+    "EN-8": {
+      "C": "0.34-0.40",
+      "Mn": "0.60-1.0",
+      "P": 0.05,
+      "S": 0.005,
+      "Si": "0.10-0.40"
+    },
+    "Mild Steel": {
+      "C": 0.23,
+      "S": 0.55,
+      "Mn": 1.0,
+      "P": 0.4,
+      "Si": 0.35
+    },
+    "transcription_warning": "The mild-steel S (0.55) and P (0.40) entries are implausible for a structural mild steel and are likely missing a decimal place in the source table; they are recorded verbatim and are not used by any model.",
+    "project_derivations": {
+      "EN-8 Carbon": "0.37 = midpoint of reported 0.34-0.40 range",
+      "EN-8 Manganese": "0.8 = midpoint of reported 0.60-1.0 range",
+      "Mild Steel Carbon": "0.23 as reported",
+      "Mild Steel Manganese": "1.00 as reported"
+    }
+  },
+  "filler_composition": {
+    "table": "Table 4",
+    "material": "Stellite-6",
+    "Cr_pct": 30,
+    "W_pct": "4-5",
+    "C_pct": 1.2,
+    "Ni_pct": "<3",
+    "Mo_pct": "<1",
+    "Fe_pct": "<3",
+    "Si_pct": "<2",
+    "Co_pct": "balance"
+  },
+  "hardness": {
+    "tables": {
+      "Table 5": {
+        "substrate": "Mild Steel",
+        "unit": "Vickers hardness number",
+        "values": {
+          "120": 310,
+          "140": 353,
+          "160": 361
+        }
+      },
+      "Table 6": {
+        "substrate": "EN-8",
+        "unit": "Vickers hardness number",
+        "values": {
+          "120": 331,
+          "140": 365,
+          "160": 371
+        }
+      }
+    },
+    "method": "Vickers microhardness, ASTM E-384, 'a range of light loads'; the applied load, indentation count, and indentation locations are not reported."
+  },
+  "oxidation": {
+    "tables": {
+      "Table 8": {
+        "substrate": "Mild Steel",
+        "exposure_h": 5,
+        "values": {
+          "120": 0.002692,
+          "140": 0.00258,
+          "160": 0.002237
+        }
+      },
+      "Table 9": {
+        "substrate": "EN-8",
+        "exposure_h": 5,
+        "values": {
+          "120": 0.002603,
+          "140": 0.002296,
+          "160": 0.002163
+        }
+      },
+      "Table 10": {
+        "substrate": "Mild Steel",
+        "exposure_h": 10,
+        "values": {
+          "120": 0.005384,
+          "140": 0.005156,
+          "160": 0.004474
+        }
+      },
+      "Table 11": {
+        "substrate": "EN-8",
+        "exposure_h": 10,
+        "values": {
+          "120": 0.005206,
+          "140": 0.004592,
+          "160": 0.004326
+        }
+      },
+      "Table 12": {
+        "substrate": "Mild Steel",
+        "exposure_h": 15,
+        "values": {
+          "120": 0.008076,
+          "140": 0.00774,
+          "160": 0.006711
+        }
+      },
+      "Table 13": {
+        "substrate": "EN-8",
+        "exposure_h": 15,
+        "values": {
+          "120": 0.007809,
+          "140": 0.006888,
+          "160": 0.006489
+        }
+      }
+    },
+    "test": {
+      "table": "Table 7",
+      "specimen": "15 x 15 x 6 mm",
+      "exposed_area_mm2": 225,
+      "specimen_size_methods_statement": "Samples sizes of 30X30mm2 were cut from hardfaced plate",
+      "specimen_size_table_7_statement": "Sample size 15x15x6mm; surface area = 15x15mm2",
+      "specimen_size_conflict": "The methods statement implies 900 mm2 while Table 7 uses 225 mm2, a factor-of-four disagreement. The project uses the Table 7 area for normalization and records the conflict rather than choosing silently.",
+      "furnace_loading": "The three samples are kept in furnace (interpreted as one specimen per current, not triplicate specimens at one condition)",
+      "coating": "alumina on all faces except one",
+      "temperature_k": 973,
+      "temperature_c": 700,
+      "times_h": [5, 10, 15],
+      "reported_equation": "oxidation rate = weight gain (g) / surface area (mm2)",
+      "reported_weight_gain_equation": "weight gain = w1 (before oxidation) - w2 (after oxidation)"
+    }
+  },
+  "unreported_metadata": [
+    "Vickers test load (the paper only says 'a range of light loads')",
+    "Number and location of hardness indentations per specimen",
+    "Number of replicate specimens or replicate measurements per condition",
+    "Raw specimen weights w1 and w2 (only the derived values are published)",
+    "Balance resolution and weighing procedure",
+    "Measured exposed area (225 mm2 is taken from the nominal 15 x 15 mm size)",
+    "Furnace atmosphere and heating/cooling rates",
+    "Travel-speed measurement uncertainty (measured with a stopwatch)",
+    "Deposit dilution, overlay thickness measurement, and coating/substrate interface characterization beyond 100x optical microscopy",
+    "Specimen identifiers (the project assigns them; they are not in the paper)"
+  ]
+}
