@@ -1,48 +1,132 @@
-# Material Hardness & Oxidation Prediction
+<p align="center">
+  <img src="assets/readme-banner.svg" alt="Stellite-6 Hardfacing: Hardness and Oxidation Prediction" width="100%">
+</p>
+
+<h1 align="center">Stellite-6 Hardness &amp; Oxidation Prediction</h1>
 
 <p align="center">
-  <strong>A paper-grounded machine-learning demonstration for Stellite-6 TIG hardfacing</strong>
+  <strong>A paper-grounded, reproducibility-first machine-learning study of TIG-hardfaced ferrous alloys.</strong>
 </p>
 
 <p align="center">
+  <a href="https://material-hardness-oxidation-prediction.onrender.com/"><img src="https://img.shields.io/badge/Live%20App-online-success?style=flat-square" alt="Live application"></a>
   <a href="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions/workflows/ci.yml"><img src="https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI status"></a>
-  <img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white" alt="Python 3.10">
-  <img src="https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white" alt="Flask 3.0">
-  <img src="https://img.shields.io/badge/scikit--learn-1.3-F7931E?logo=scikitlearn&logoColor=white" alt="scikit-learn 1.3">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/Code%20license-MIT-3DA639.svg" alt="MIT License"></a>
-  <a href="data/LICENSE"><img src="https://img.shields.io/badge/Data%20license-CC%20BY%203.0-EF9421.svg" alt="CC BY 3.0"></a>
+  <img src="https://img.shields.io/badge/Python-3.10-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10">
+  <img src="https://img.shields.io/badge/scikit--learn-1.3-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit-learn 1.3">
+  <img src="https://img.shields.io/badge/Flask-3.0-000000?style=flat-square&logo=flask&logoColor=white" alt="Flask 3.0">
+  <img src="https://img.shields.io/badge/tests-46%20passing-brightgreen?style=flat-square" alt="46 tests passing">
+  <img src="https://img.shields.io/badge/baseline-0.3.0-blue?style=flat-square" alt="Reproducibility baseline 0.3.0">
 </p>
 
-> **Research scope:** This project reproduces and explores the measurements in one
-> published experiment. It is not an independently validated engineering predictor.
-> The paper reports six hardness values and eighteen oxidation values with no
-> replicate specimens or uncertainty estimates. The eighteen oxidation rows reduce
-> to six effective Material × Current conditions.
+<p align="center">
+  <a href="https://doi.org/10.1088/1757-899X/998/1/012061"><img src="https://img.shields.io/badge/DOI-10.1088%2F1757--899X%2F998%2F1%2F012061-1f6feb?style=flat-square" alt="Source paper DOI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/code%20license-MIT-3DA639?style=flat-square" alt="MIT License"></a>
+  <a href="data/LICENSE"><img src="https://img.shields.io/badge/data%20license-CC%20BY%203.0-EF9421?style=flat-square" alt="CC BY 3.0"></a>
+</p>
 
-## Live application
+<p align="center">
+  <a href="https://material-hardness-oxidation-prediction.onrender.com/"><strong>Live application</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://doi.org/10.1088/1757-899X/998/1/012061">Source paper</a>
+  &nbsp;·&nbsp;
+  <a href="docs/SOURCE_AUDIT.md">Source audit</a>
+  &nbsp;·&nbsp;
+  <a href="docs/MODEL_CARD.md">Model card</a>
+  &nbsp;·&nbsp;
+  <a href="docs/REPRODUCIBILITY.md">Reproducibility</a>
+  &nbsp;·&nbsp;
+  <a href="docs/API_REFERENCE.md">API reference</a>
+</p>
 
-Try the [Stellite-6 Hardfacing Property Predictor](https://material-hardness-oxidation-prediction.onrender.com/).
-Select a paper-tested substrate, welding current, and exposure time to see the
-model estimate, an approximate interval, and the value printed in the paper.
+> **Research scope.** This repository reproduces and explores the measurements in one published experiment. It is not an independently validated engineering predictor. The paper reports six hardness values and eighteen oxidation values with no replicate specimens or uncertainty estimates. The eighteen oxidation rows reduce to six effective Material × Current conditions.
 
-The free Render service can spin down while idle, so the first request after
-inactivity may take longer.
+---
 
-## What this project does
+## Contents
 
-The application demonstrates a traceable small-data workflow using the reported
-results from Chandra et al. (2020):
+- [At a glance](#at-a-glance)
+- [Why this project is different](#why-this-project-is-different)
+- [Scientific question](#scientific-question)
+- [Source and experimental scope](#source-and-experimental-scope)
+- [Data and provenance](#data-and-provenance)
+- [Source audit](#source-audit)
+- [Methodology](#methodology)
+- [Results](#results)
+- [Uncertainty and applicability](#uncertainty-and-applicability)
+- [Application and API](#application-and-api)
+- [Architecture and repository layout](#architecture-and-repository-layout)
+- [Reproduce the study](#reproduce-the-study)
+- [Testing and CI](#testing-and-ci)
+- [Deployment](#deployment)
+- [External measurements](#external-measurements)
+- [Research roadmap](#research-roadmap)
+- [Limitations and responsible use](#limitations-and-responsible-use)
+- [Citation, license, and acknowledgements](#citation-license-and-acknowledgements)
+- [Archived material](#archived-material)
 
-| Target | Reported data | Effective conditions | Inputs | Model |
-|---|---:|---:|---|---|
-| Hardness | 6 values | 6 | Substrate, current | Linear regression (v0.2.0) |
-| Oxidation | 18 values | 6 | Substrate, current, exposure hours | Linear mass-gain **rate** model (v0.3.0) |
+---
 
-The browser returns both estimates. The JSON API returns both estimates plus the
-applicability domain, approximate 90 % intervals, model versions, warnings, and
-the paper-reported value at that condition.
+## At a glance
 
-## Scientific source
+| | |
+|---|---|
+| **Study** | Stellite-6 hardfacing deposited on EN-8 and mild steel by TIG surfacing |
+| **Source** | Chandra et al., *IOP Conference Series: Materials Science and Engineering* 998 (2020) 012061 |
+| **Targets** | Vickers hardness; cumulative areal mass gain after 5–15 h at 973 K (700 °C) |
+| **Process conditions** | 2 substrates × 3 welding currents (120, 140, 160 A) |
+| **Training data** | 6 hardness values; 18 oxidation values from 6 effective Material × Current cells |
+| **Models** | Linear hardness model (v0.2.0); linear oxidation-rate model (v0.3.0) |
+| **Validation** | Leave-one-current-out (primary); leave-one-condition-out (secondary) |
+| **Audit** | 24 / 24 values and source-table labels match; unit, sign, and area remain unresolved |
+| **Uncertainty** | Approximate 90 % empirical intervals plus an applicability domain |
+| **Quality gates** | 46 tests, Ruff, source audit, training, calibration, reproducibility, benchmark, external validation |
+| **Delivery** | Flask browser interface and JSON API on Render, with `/healthz` |
+
+### Headline results
+
+| Target | Validation | MAE | RMSE | R² | Honest reading |
+|---|---|---:|---:|---:|---|
+| Hardness | Leave-one-current-out | 26.25 HV | 27.51 HV | −0.656 | Withholding a current is worse than predicting the mean; the model is a transparent baseline, not a validated hardness predictor. |
+| Oxidation | Leave-one-current-out | 1.346 × 10⁻⁴ (g/mm² as printed) | 1.631 × 10⁻⁴ | 0.9936 | Strong on six effective conditions, but not evidence of eighteen independent kinetic observations. |
+
+<p align="center">
+  <img src="assets/readme-home.png" alt="The current Stellite-6 Hardfacing Predictor interface" width="100%">
+</p>
+
+<p align="center"><em>Current interface, captured from the deployed application. The form only exposes paper-tested conditions; estimates are accompanied by measured values, applicability, and warnings.</em></p>
+
+---
+
+## Why this project is different
+
+Most small-data materials ML demos stop at a fitted curve. This one treats the **evidence chain** as the deliverable:
+
+- **Audit before modelling.** Every CSV value and source-table label is compared with the paper. Arithmetic, exposure-time multiples, specimen dimensions, units, and sign conventions are checked and documented.
+- **Grouped validation.** An entire welding current is held out at a time, so the score measures transfer to an unseen process setting rather than interpolation inside the table.
+- **Pre-registered model selection.** Challengers must beat the shipped model by at least 20 % in primary MAE, improve at least two of three folds, and not degrade the secondary protocol by more than 10 %.
+- **Reproducibility as a CI gate.** Dataset hashes, model hashes, environment details, metrics, and limitations are recorded in manifests. CI retrains, recalibrates, recomputes the benchmark, and fails on unexplained drift.
+- **Uncertainty with a stated basis.** Intervals come from signed out-of-fold residuals. They are labelled approximate because six conditions cannot support guaranteed coverage.
+- **External data without leakage.** New measurements enter through a separate validated path and are never merged into training automatically. Oxidation residuals require a comparable paper-unit value, so the unresolved unit cannot hide inside an apparently precise metric.
+- **Limits in the product.** The API, UI, model metadata, model card, and manifests all repeat the same scientific caveats.
+
+---
+
+## Scientific question
+
+Stellite-6 is a cobalt-based hardfacing alloy used to resist wear and oxidation. The source study deposits a single 1 mm layer on EN-8 and mild steel, then measures:
+
+1. **Vickers hardness** of the hardfaced surface.
+2. **Mass change after isothermal exposure** at 973 K for 5, 10, and 15 hours.
+
+The modelling question is not “can a flexible model fit 24 table values?” It is:
+
+> What can be learned, and honestly claimed, from two substrates, three process settings, and no replicate specimens?
+
+The answer shapes the entire repository: simple estimable models, grouped validation, approximate intervals, explicit applicability, and documentation of what the source does not support.
+
+---
+
+## Source and experimental scope
 
 > C. Dinesh Chandra, B. Rushikesh, Mohammed Numan, and B. Venkatesh,
 > “Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG
@@ -50,170 +134,311 @@ the paper-reported value at that condition.
 > vol. 998 (2020), 012061.
 > [https://doi.org/10.1088/1757-899X/998/1/012061](https://doi.org/10.1088/1757-899X/998/1/012061)
 
-The experiment deposited Stellite-6 onto EN-8 and mild-steel substrates by TIG
-surfacing. Welding current, travel speed, and heat input changed together in the
-reported schedule; the dataset cannot isolate a causal effect of current alone.
+The paper is licensed CC BY 3.0. Two PDF copies were compared during the audit: an author-supplied copy and the open-access IOP copy. All tabulated values and both oxidation equations agree between them.
 
-### Paper-tested conditions
+### Reported process schedule
 
-| Input | Supported values | Notes |
+| Parameter | Reported values | Role in the dataset |
 |---|---|---|
-| Substrate | `EN-8`; `Mild Steel` | Two substrates reported in the paper |
-| Welding current | `120`, `140`, `160` A | Heat inputs 0.800, 0.864, 0.912 kJ/mm; travel speed also changes |
-| Oxidation exposure | `5`, `10`, `15` hours | 973 K (700 °C) |
+| Substrate | EN-8; Mild Steel | Model input |
+| Welding current | 120, 140, 160 A | Model input and validation group |
+| Arc voltage | 15 V | Process metadata |
+| Travel speed | 2.25, 2.43, 2.63 mm/s | Process metadata; changes with current |
+| Heat input | 0.800, 0.864, 0.912 kJ/mm | Metadata; reproduced by `Q = V · I / v` |
+| Filler | Stellite-6 rod, 3.2 mm diameter | Constant across the study |
+| Deposit | One 1 mm layer on 60 × 30 × 6 mm plates; oil quenched | Process context |
+| Oxidation exposure | 5, 10, 15 h at 973 K (700 °C) | Oxidation input |
+| Oxidation area | 225 mm² in Table 7; methods imply 900 mm² | Unresolved; see audit |
 
-The paper gives no replicate-level data or uncertainty estimates. It does not
-state the Vickers test load. The oxidation target is the paper's printed mass
-change divided by area; it is cumulative, not time-normalized.
+> **Collinearity warning.** Current, travel speed, and heat input change together as a one-dimensional schedule. The coefficient on current is therefore an index of the process setting, **not** a causal current effect. No model in this repository separates their influences.
 
-## What the source audit found
+### Paper-tested prediction conditions
 
-The audit is a CI gate and is documented in
-[`docs/SOURCE_AUDIT.md`](docs/SOURCE_AUDIT.md), with generated output in
-[`reports/audit/`](reports/audit/).
+| Input | Allowed values | Notes |
+|---|---|---|
+| `Material` | `EN-8`, `Mild Steel` | Two substrates |
+| `Current` | `120`, `140`, `160` A | Three process settings |
+| `Exposure_Time_h` | `5`, `10`, `15` h | Oxidation only |
 
-| Check | Result |
+The service rejects unsupported levels rather than extrapolating. The Vickers test load, indentation count, indentation locations, furnace atmosphere, heating/cooling rates, and replicate structure are not reported.
+
+---
+
+## Data and provenance
+
+| File | Rows | Content |
+|---|---:|---|
+| [`data/hardness.csv`](data/hardness.csv) | 6 | One Vickers hardness value per Material × Current condition (Tables 5–6) |
+| [`data/oxidation.csv`](data/oxidation.csv) | 18 | Cumulative areal mass gain per Material × Current × Exposure (Tables 8–13) |
+| [`data/source_tables.json`](data/source_tables.json) | — | Transcribed source values, equations, units, specimen statements, and PDF digests |
+| [`data/README.md`](data/README.md) | — | Column meanings, units, scope, and unresolved issues |
+| [`data/external/`](data/external/README.md) | — | Header-only templates and validator for new measurements |
+| [`data/LICENSE`](data/LICENSE) | — | CC BY 3.0 notice for the transcribed paper data |
+
+Every training row is marked `reported_paper_measurement` and carries a stable `Row_ID`, `Source`, `Source_Table`, `Observation_Group`, `Specimen_ID`, `Derivation_Status`, `Replicate_Status`, and `Chemistry_Status`. The training loader rejects any other `Data_Status`; new measurements cannot leak into the training set.
+
+The dataset is canonical and hashed:
+
+| File | SHA-256 |
 |---|---|
-| Table transcription | 24 / 24 values and labels match the paper |
-| Process arithmetic | `Q = 15 V · I / v` reproduces 0.800 / 0.864 / 0.912 kJ/mm within rounding |
-| Exposure-time multiples | 11 exact and 1 near multiple (0.08 % deviation); effective oxidation n = 6 |
-| Specimen dimensions | **Unresolved**: methods say 30 × 30 mm², Table 7 says 15 × 15 mm (225 mm²) |
-| Oxidation unit | **Unresolved**: literal g/mm² implies an implausible 0.487–1.817 g specimen change; raw grams at 225 mm² would give 0.96–3.59 mg/cm² |
-| Oxidation sign | **Unresolved**: printed `w1 − w2` implies mass loss, but every value is positive |
-| Replicates | None reported for any condition |
+| `data/hardness.csv` | `1d83be25aa4b59453bc24b816c7f6267be0e0b7480bc8fc2a394fba9d6745a60` |
+| `data/oxidation.csv` | `be5edafcebde4ada00ba3578df623b84953f79ed030f109f20cfdf9ade6f820b` |
+| `data/source_tables.json` | `a444175f2ed578396b6a1d1a25de6cfd6553e4b45fcb799a9e0d1aeda8953bb0` |
 
-These are not corrected by assumption. They appear in the data columns, API
-warnings, UI, manifests, model card, and benchmark notes.
+> **No fabricated rows.** Interpolated, smoothed, or inferred values are not independent experiments and are never treated as training measurements.
 
-## Dataset and provenance
+---
 
-| File | Content |
-|---|---|
-| [`data/hardness.csv`](data/hardness.csv) | 6 rows from Tables 5 and 6 (2 substrates × 3 currents) |
-| [`data/oxidation.csv`](data/oxidation.csv) | 18 rows from Tables 8–13 (2 substrates × 3 currents × 3 exposures) |
-| [`data/source_tables.json`](data/source_tables.json) | Transcribed source values, equations, units, and PDF digests (Tables 1–13) |
-| [`data/README.md`](data/README.md) | Column meanings, units, scope, and unresolved issues |
-| [`data/external/`](data/external/README.md) | Header-only templates and validator for new measurements, kept separate from training |
+## Source audit
 
-Every training row is marked `reported_paper_measurement`. The loader rejects any
-other `Data_Status`, and new measurements go through the external path instead:
-raw hardness readings or raw oxidation weights are validated, scored against the
-shipped models, and never merged into training automatically. Interpolated values
-are not independent experiments and are not training measurements. See
-[`docs/EXPERIMENTAL_PLAN.md`](docs/EXPERIMENTAL_PLAN.md) for how to collect them.
+The audit is a CI gate. Human-readable findings are in [`docs/SOURCE_AUDIT.md`](docs/SOURCE_AUDIT.md); machine-readable output is in [`reports/audit/`](reports/audit/).
 
-## Models and evaluation
+| Check | Status | Finding |
+|---|---|---|
+| Table transcription | **Pass** | 24 / 24 values and source-table labels match the paper |
+| Process arithmetic | **Pass** | `Q = 15 V · I / v` reproduces 0.800, 0.864, and 0.912 kJ/mm within 5.5 × 10⁻⁴ kJ/mm |
+| Exposure-time multiples | **Warning** | 11 exact and 1 near multiple of the 5 h value; the 18 rows contain 6 effective conditions |
+| Specimen dimensions | **Unresolved** | Methods say 30 × 30 mm²; Table 7 says 15 × 15 mm with 225 mm² exposed area |
+| Oxidation unit | **Unresolved** | Literal g/mm² implies 0.487–1.817 g specimen change, which is not plausible |
+| Oxidation sign | **Unresolved** | Printed `w1 − w2` implies mass loss, but every tabulated value is positive |
+| Replication | **Warning** | No replicate specimens, repeated indentations, or repeated weighings are reported |
 
-### Pipelines
+### What the unresolved issues mean
 
-- **Hardness:** one-hot substrate + standardized current → linear regression.
-- **Oxidation:** linear rate model. It fits areal gain per hour from substrate and
-  current, then multiplies by exposure:
+**Unit.** If the tabulated numbers are read literally as g/mm² over 225 mm², the implied mass change is 4.6–17.1 % of a roughly 10.6 g specimen, which is not credible for 5–15 h at 700 °C. If the numbers are raw grams, the implied areal gain is 0.96–3.59 mg/cm² at 225 mm² or 0.24–0.90 mg/cm² at 900 mm². Both are physically plausible. The raw weights and measured area are not published, so no conversion is applied.
 
-  ```text
-  rate = a + b · current + c · substrate
-  areal mass gain = rate × exposure_hours
-  ```
+**Sign.** For an oxidation test the specimen normally gains mass, making `w1 − w2` negative. Every printed value is positive. Either the equation is transposed or the specimens lost mass. No sign correction is applied.
 
-  This matches the table's near-exact linear-time structure and works with six
-  effective conditions. The previous 300-tree random forest could not extrapolate
-  and was outperformed under identical folds.
+**Area.** The methods and Table 7 disagree by a factor of four. The project uses the Table 7 area because it accompanies the oxidation tables, but records the conflict rather than choosing silently.
 
-### Grouped validation
+**Independence.** Eleven of the twelve 10 h and 15 h values are exact multiples of the 5 h value to printed precision, and the twelfth differs by 0.08 %. The paper's statement that three samples were kept in the furnace per run is consistent with one specimen per current, not triplicate specimens. Every manifest therefore records `effective_independent_observations = 6`.
 
-Primary protocol: **Leave-One-Current-Out** (LOCO) over three current groups. All
-rows at one current, including both substrates and all exposure times, are held
-out. Two of the three folds require predicting outside the training current
-range. Secondary protocol: **Leave-One-Condition-Out** (LOGO) over six
-Material × Current cells.
+> **What we do not do:** assume the intended unit, flip the sign, invent replicates, or rescale values to make the figures look physically neat. The issues are surfaced in the data columns, API warnings, UI, manifests, model card, and benchmark notes.
 
-| Target | Protocol | MAE | RMSE | R² | Fold MAE (mean ± sd) |
-|---|---|---:|---:|---:|---:|
-| Hardness | LOCO | 26.25 | 27.51 | −0.656 | 26.25 ± 7.42 |
-| Oxidation | LOCO | 1.346 × 10⁻⁴ | 1.631 × 10⁻⁴ | 0.9936 | 1.35 × 10⁻⁴ ± 0.48 × 10⁻⁴ |
+Open questions for the authors are listed in [`docs/SOURCE_AUDIT.md`](docs/SOURCE_AUDIT.md#8a-questions-for-the-authors).
 
-The negative hardness R² means withholding an entire current is worse than
-predicting the mean. The oxidation score is encouraging but rests on six
-effective conditions, not eighteen independent samples. The deployable pipelines
-are refit on all reported rows after validation, so these metrics describe
-transfer to an unseen current, not accuracy on the training table.
+---
 
-### Fair comparison and model change
+## Methodology
 
-Every baseline and challenger was run under the same folds. The adoption rule was
-fixed before looking at results:
+### End-to-end pipeline
 
-1. primary LOCO MAE improves by at least 20 %;
-2. at least two of three folds improve;
-3. secondary LOGO MAE does not worsen by more than 10 %.
+```mermaid
+flowchart LR
+    P[Paper Tables 5-13] --> T[Transcription + provenance]
+    T --> S[Schema validation]
+    S --> A[Source audit]
+    A --> E[Grouped evaluation]
+    E --> C[Model selection rule]
+    C --> F[Fit on all reported rows]
+    F --> M[Model + metadata + manifest]
+    M --> K[Residual calibration]
+    K --> I[Inference context<br/>AD - intervals - warnings]
+    U[Browser form] --> V[Paper-condition validation]
+    J[JSON client] --> V
+    V --> I
+    I --> R[Estimate + measured value + limits]
+    X[External measurements] --> Y[Separate validator]
+    Y --> I
+```
 
-| Target | Shipped | Best challenger | Δ LOCO MAE | Folds improved | Decision |
+### Features and models
+
+| Target | Features | Model | Version |
+|---|---|---|---|
+| Hardness | One-hot substrate; standardized current | Ordinary least squares | v0.2.0 |
+| Oxidation | One-hot substrate; standardized current; exposure hours | Linear rate model | v0.3.0 |
+
+```text
+Hardness = β0 + β1 · Current + β2 · [Material = Mild Steel] + ε
+
+rate = a + b · Current + c · [Material = Mild Steel]
+Areal_Mass_Gain = rate × Exposure_Time_h
+```
+
+The oxidation model fits areal gain per hour and multiplies by exposure. This follows the table's near-exact linear-time structure and avoids asking a tree ensemble to extrapolate with six effective conditions. The hardness model remains the simplest estimable model because no challenger met the adoption rule.
+
+### Validation protocols
+
+| Protocol | Group held out | What it tests | Use |
+|---|---|---|---|
+| `LOCO_current` | All rows at one welding current | Transfer to an unseen process setting | Primary |
+| `LOGO_condition` | One Material × Current cell | Interpolation between conditions | Secondary |
+
+Both protocols use the same rows and folds for every model. Two of the three LOCO folds require prediction outside the training current range; this is deliberately a stress test.
+
+### Pre-registered model-selection rule
+
+A challenger may replace the shipped model only if it satisfies all three conditions:
+
+1. Primary LOCO MAE improves by at least **20 %**.
+2. At least **two of three** LOCO folds improve.
+3. Secondary LOGO MAE does not worsen by more than **10 %**.
+
+| Target | Shipped model | Best challenger | Δ LOCO MAE | Folds improved | Decision |
 |---|---|---|---:|---:|---|
 | Hardness | `linear` | `ridge` | −12.0 % | 1 / 3 | Keep `linear` |
 | Oxidation | `random_forest` (v0.2.0) | `rate_linear` | −69.4 % | 3 / 3 | Adopt `rate_linear` |
 
-The oxidation adoption is recorded in
-[`reports/benchmark/pre_adoption_random_forest/`](reports/benchmark/pre_adoption_random_forest/)
-and in the reproducibility baseline. The hardness challenger did not meet the
-evidence bar, so the simpler model remains.
+The oxidation change also reduced secondary LOGO MAE by 47.2 %. The full OOF predictions, fold metrics, selection record, and single-row sensitivity are in [`reports/benchmark/`](reports/benchmark/).
 
-Full outputs: [`reports/benchmark/`](reports/benchmark/), including out-of-fold
-predictions, fold metrics, selection rationale, and single-row sensitivity.
+### Leakage controls
 
-### Uncertainty and applicability
+- Grouped folds by current, never random row splits.
+- All rows at the held-out current, including both substrates and all exposure times, are removed from training.
+- Features are limited to substrate and current; heat input, speed, carbon, and manganese are metadata because they are collinear or tied to substrate identity.
+- Model selection uses the same folds and a rule fixed before the results are inspected.
+- External rows are validated and scored separately; they are not merged into training.
 
-Every response includes an approximate 90 % interval from signed LOCO residual
-quantiles (`models/calibration.json`):
+---
 
-| Target | n OOF | Effective n | Lower offset | Upper offset |
+## Results
+
+### Primary validation metrics
+
+| Target | Protocol | MAE | RMSE | R² | Fold MAE (mean ± sd) |
+|---|---|---:|---:|---:|---:|
+| Hardness | `LOCO_current` | 26.25 HV | 27.51 HV | −0.656 | 26.25 ± 7.42 |
+| Oxidation | `LOCO_current` | 1.346 × 10⁻⁴ | 1.631 × 10⁻⁴ | 0.9936 | 1.35 × 10⁻⁴ ± 0.48 × 10⁻⁴ |
+
+The metrics come from out-of-fold predictions. The deployable pipelines are refit on all reported rows **after** validation, so these numbers describe transfer to an unseen current, not training residuals.
+
+### Hardness out-of-fold predictions
+
+| Material | Current (A) | Observed (HV) | Predicted (HV) | Residual |
 |---|---:|---:|---:|---:|
-| Hardness | 6 | 6 | −17.50 | +36.50 |
-| Oxidation | 18 | 6 | −3.465 × 10⁻⁴ | +2.61 × 10⁻⁴ |
+| EN-8 | 120 | 331 | 357.50 | +26.50 |
+| Mild Steel | 120 | 310 | 346.50 | +36.50 |
+| EN-8 | 140 | 365 | 351.00 | −14.00 |
+| Mild Steel | 140 | 353 | 335.50 | −17.50 |
+| EN-8 | 160 | 371 | 405.75 | +34.75 |
+| Mild Steel | 160 | 361 | 389.25 | +28.25 |
 
-These are not guaranteed-coverage intervals. They summarize observed errors in a
-handful of conditions and cannot represent specimen-to-specimen variability that
-was never measured.
+<details>
+<summary><strong>Oxidation out-of-fold predictions (18 rows)</strong></summary>
 
-Every response also states whether the condition is a `reported_condition`, an
-`unmeasured_combination_within_tested_levels`, or `outside_tested_conditions`.
-When the exact condition is in the paper, the printed value and source table are
-returned alongside the estimate for comparison.
+| Material | Current (A) | Exposure (h) | Observed | Predicted | Residual |
+|---|---:|---:|---:|---:|---:|
+| EN-8 | 120 | 5 | 0.002603 | 0.002586 | −0.000017 |
+| Mild Steel | 120 | 5 | 0.002692 | 0.002765 | +0.000073 |
+| EN-8 | 120 | 10 | 0.005206 | 0.005172 | −0.000034 |
+| Mild Steel | 120 | 10 | 0.005384 | 0.005529 | +0.000145 |
+| EN-8 | 120 | 15 | 0.007809 | 0.007758 | −0.000051 |
+| Mild Steel | 120 | 15 | 0.008076 | 0.008294 | +0.000218 |
+| EN-8 | 140 | 5 | 0.002296 | 0.002383 | +0.000087 |
+| Mild Steel | 140 | 5 | 0.002580 | 0.002464 | −0.000116 |
+| EN-8 | 140 | 10 | 0.004592 | 0.004766 | +0.000174 |
+| Mild Steel | 140 | 10 | 0.005156 | 0.004929 | −0.000227 |
+| EN-8 | 140 | 15 | 0.006888 | 0.007149 | +0.000261 |
+| Mild Steel | 140 | 15 | 0.007740 | 0.007393 | −0.000347 |
+| EN-8 | 160 | 5 | 0.002163 | 0.002135 | −0.000028 |
+| Mild Steel | 160 | 5 | 0.002237 | 0.002321 | +0.000084 |
+| EN-8 | 160 | 10 | 0.004326 | 0.004269 | −0.000057 |
+| Mild Steel | 160 | 10 | 0.004474 | 0.004642 | +0.000168 |
+| EN-8 | 160 | 15 | 0.006489 | 0.006404 | −0.000085 |
+| Mild Steel | 160 | 15 | 0.006711 | 0.006963 | +0.000252 |
+
+Residual = predicted − observed, in the paper's printed units. The 10 h and 15 h rows are exact or near-exact multiples of the 5 h values, so the 18 residuals are not 18 independent tests.
+
+</details>
+
+### Benchmark against simple baselines
+
+Every baseline and challenger was run under identical folds:
+
+| Target | Protocol | Best model | MAE | R² |
+|---|---|---|---:|---:|
+| Hardness | `LOCO_current` | `ridge` | 23.10 | −0.329 |
+| Hardness | `LOGO_condition` | `random_forest` | 10.77 | 0.539 |
+| Oxidation | `LOCO_current` | `rate_linear` (shipped) | 1.346 × 10⁻⁴ | 0.9936 |
+| Oxidation | `LOGO_condition` | `rate_linear` (shipped) | 1.749 × 10⁻⁴ | 0.9910 |
+
+The hardness ridge model improves LOCO MAE but fails the fold and secondary-protocol requirements, so the simpler linear model remains. The oxidation rate model is best under both protocols. Full tables, including global means, substrate means, time means, and random forests, are in [`reports/benchmark/summary.md`](reports/benchmark/summary.md).
+
+### Why the hardness R² is negative
+
+With six conditions, holding out an entire current leaves four training rows spanning only two currents. The linear model must extrapolate to the unseen current, and its errors are larger than the variance around the mean of the held-out rows. That is an honest result, not a bug: the data do not support reliable hardness transfer across currents.
+
+---
+
+## Uncertainty and applicability
+
+Every API response includes an approximate 90 % interval from signed leave-one-current-out residual quantiles:
+
+| Target | OOF predictions | Effective n | Lower offset | Upper offset | Source |
+|---|---:|---:|---:|---:|---|
+| Hardness | 6 | 6 | −17.50 HV | +36.50 HV | `models/calibration.json` |
+| Oxidation | 18 | 6 | −3.465 × 10⁻⁴ | +2.61 × 10⁻⁴ | `models/calibration.json` |
+
+The offsets are asymmetric because the residuals are skewed. They are **empirical, approximate intervals**, not guaranteed-coverage prediction intervals. With no replicate specimens, they cannot represent specimen-to-specimen variability.
+
+### Applicability domain
+
+| Status | Meaning | Public API |
+|---|---|---|
+| `reported_condition` | Exact Material × Current (and exposure for oxidation) appears in the paper | Reachable |
+| `unmeasured_combination_within_tested_levels` | Levels are individually tested but the combination is not | Rejected before prediction |
+| `outside_tested_conditions` | At least one input is outside the tested levels | Rejected before prediction |
+
+At a reported condition, the response also returns the paper's measured value and source table. The product never claims support for conditions the paper did not test.
+
+---
 
 ## Application and API
 
 ### Browser interface
 
-The interface provides selectors for substrate, current, and exposure; displays
-hardness and cumulative areal mass-gain estimates with intervals, applicability,
-and warnings; and includes a model-details panel populated from
-`/api/v1/model-info`.
+The current interface provides:
 
-### JSON API
+- Substrate, current, and exposure selectors restricted to paper-tested values.
+- Hardness and cumulative areal mass-gain estimates with approximate intervals.
+- The paper-reported value and source table when the exact condition exists.
+- Applicability status, model versions, and the same warnings shown by the API.
+- A model-details panel populated from `/api/v1/model-info`.
+- Light and dark themes, copy/reset controls, and a no-JavaScript server-rendered fallback.
 
-`POST /api/v1/predict`
+### Endpoints
 
-```json
-{
-  "Material": "EN-8",
-  "Current": 140,
-  "Exposure_Time_h": 10
-}
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/` | Browser interface |
+| `POST` | `/predict` | Server-rendered form submission |
+| `POST` | `/api/v1/predict` | JSON predictions for both targets |
+| `GET` | `/api/v1/model-info` | Versions, metrics, calibration, audit findings, limitations |
+| `GET` | `/healthz` | Artifact availability and service health |
+
+### Example request
+
+```bash
+curl -sS -X POST https://material-hardness-oxidation-prediction.onrender.com/api/v1/predict \
+  -H 'Content-Type: application/json' \
+  -d '{"Material":"EN-8","Current":140,"Exposure_Time_h":10}'
 ```
 
-Response (abridged):
+### Example response (abridged)
 
 ```json
 {
   "ok": true,
   "hardness": 355.6666666666667,
-  "hardness_interval_90": {"lower": 338.1666666666667, "upper": 392.1666666666667},
+  "hardness_interval_90": {
+    "lower": 338.1666666666667,
+    "upper": 392.1666666666667,
+    "coverage": 0.9,
+    "effective_independent_observations": 6
+  },
   "hardness_applicability": {
     "status": "reported_condition",
     "measured_value": 365.0,
     "measured_source_table": "Table 6"
   },
   "oxidation_areal_mass_gain_g_mm2": 0.004708,
-  "oxidation_interval_90": {"lower": 0.0043615, "upper": 0.004969},
+  "oxidation_interval_90": {
+    "lower": 0.0043615,
+    "upper": 0.004969,
+    "coverage": 0.9,
+    "effective_independent_observations": 6
+  },
   "oxidation_applicability": {
     "status": "reported_condition",
     "measured_value": 0.004592,
@@ -221,50 +446,138 @@ Response (abridged):
   },
   "oxidation_target_definition": "Cumulative mass gain per exposed area; g/mm^2 as printed; not time-normalized.",
   "model_versions": {"hardness": "0.2.0", "oxidation": "0.3.0"},
-  "warnings": ["..."]
+  "warnings": [
+    "Supported only at the paper-tested conditions; no replicate specimens or repeated measurements are published.",
+    "The Vickers hardness test load is not reported, so the hardness scale is identified only by the printed table values.",
+    "The printed g/mm^2 unit implies a specimen mass change that is not physically plausible; the intended scale is unresolved and values are shown as printed.",
+    "The printed sign convention implies mass loss while every tabulated value is positive; no sign correction is applied.",
+    "Exposure-time rows are exact multiples of the 5 h value, so they are not independent kinetic measurements."
+  ]
 }
 ```
 
-Allowed values are `Material`: `EN-8` or `Mild Steel`; `Current`: `120`, `140`,
-or `160`; `Exposure_Time_h`: `5`, `10`, or `15`. A non-object body or an
-unsupported/missing/non-finite input returns HTTP 400; a missing artifact returns
-HTTP 503. See [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md) for the full
-contract, `/api/v1/model-info`, and `/healthz`.
+A non-object body, missing field, non-numeric value, non-finite value, or unsupported condition returns HTTP 400. A missing model artifact returns HTTP 503. The full contract is in [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md).
 
-## Architecture
+---
+
+## Architecture and repository layout
 
 ```mermaid
-flowchart LR
-    D[Paper tables<br/>6 hardness · 18 oxidation] --> A[Source audit<br/>+ schema validation]
-    A --> T[Training and grouped evaluation]
-    T --> M[Saved pipelines + manifests]
-    M --> I[Inference context<br/>AD · intervals · warnings]
-    U[Browser form] --> V[Paper-condition validation]
-    J[JSON client] --> V
-    V --> I
-    I --> R[Estimates + paper value + limits]
+flowchart TB
+    subgraph Data
+        CSV[data/hardness.csv<br/>data/oxidation.csv]
+        SRC[data/source_tables.json]
+        SCHEMA[src/data/schema.py<br/>validation + hashing]
+        AUDIT[src/data/audit.py<br/>source comparison]
+        EXT[src/data/external.py<br/>new measurements]
+    end
+
+    subgraph Models
+        PIPE[src/models/pipelines.py]
+        TRAIN[src/models/train_*.py]
+        BENCH[src/models/benchmark.py]
+        CAL[src/models/calibration.py]
+        MAN[src/models/manifest.py]
+        REPRO[src/models/reproducibility.py]
+        EVAL[src/models/external_validation.py]
+    end
+
+    subgraph Serving
+        VAL[src/inference/validator.py]
+        PRED[src/inference/predict.py]
+        DOM[src/inference/domain.py]
+        ROUTES[src/app/routes.py]
+        UI[Flask UI + JSON API]
+    end
+
+    CSV --> SCHEMA
+    SRC --> AUDIT
+    SCHEMA --> AUDIT
+    SCHEMA --> TRAIN
+    TRAIN --> PIPE
+    TRAIN --> MAN
+    BENCH --> TRAIN
+    CAL --> TRAIN
+    REPRO --> TRAIN
+    MAN --> PRED
+    CAL --> DOM
+    PRED --> DOM
+    DOM --> ROUTES
+    VAL --> ROUTES
+    ROUTES --> UI
+    EXT --> EVAL
+    EVAL --> PRED
 ```
 
-| Path | Purpose |
+```
+Material-Hardness-Oxidation-Prediction/
+├── assets/                         # README banner and current UI capture
+├── data/
+│   ├── hardness.csv                # 6 paper hardness rows
+│   ├── oxidation.csv               # 18 paper oxidation rows
+│   ├── source_tables.json          # transcribed source values and equations
+│   ├── external/                   # new-measurement templates and validator docs
+│   ├── README.md                   # column meanings, units, provenance
+│   └── LICENSE                     # CC BY 3.0 data notice
+├── docs/
+│   ├── SOURCE_AUDIT.md             # audit findings and open questions
+│   ├── MODEL_CARD.md               # model form, metrics, limits, acceptance criteria
+│   ├── REPRODUCIBILITY.md          # baseline, manifests, commands, update procedure
+│   ├── ARCHITECTURE.md             # modules, data flow, design constraints
+│   ├── API_REFERENCE.md            # endpoint contract and example responses
+│   ├── EXPERIMENTAL_PLAN.md        # phases for independent evidence
+│   └── archive/                    # archived exploratory plots
+├── models/
+│   ├── hardness_model.joblib       # deployed hardness pipeline
+│   ├── oxidation_model.joblib      # deployed oxidation-rate pipeline
+│   ├── calibration.json            # signed residual quantiles
+│   ├── *_metadata.json             # lightweight metrics and features
+│   └── *_manifest.json             # hashes, environment, config, limitations
+├── reports/
+│   ├── audit/                      # generated source-audit report
+│   ├── benchmark/                  # OOF predictions, fold metrics, sensitivity
+│   ├── reproducibility/            # expected baseline and observed check
+│   └── external_validation/        # generated when external rows exist
+├── screenshots/                    # archived interface screenshots
+├── src/
+│   ├── data/                       # schema, audit, external validation
+│   ├── models/                     # pipelines, training, benchmark, calibration
+│   ├── inference/                  # artifact loading, validation, AD, intervals
+│   └── app/                        # Flask factory, routes, templates, static assets
+├── tests/                          # 46 tests across schema, audit, model, API
+├── .github/workflows/ci.yml        # audit, train, calibrate, reproduce, benchmark
+├── render.yaml                     # Render runtime, health check, Gunicorn
+├── pyproject.toml                  # Ruff and pytest configuration
+├── Makefile                        # common commands
+├── CITATION.cff                    # software citation metadata
+├── CONTRIBUTING.md                 # contribution and data rules
+├── requirements.txt                # runtime dependencies
+├── requirements-dev.txt            # test and lint dependencies
+└── LICENSE                         # MIT code license
+```
+
+### Key documents
+
+| Document | What it answers |
 |---|---|
-| `data/` | Paper-transcribed CSVs, source tables, provenance, and data license |
-| `docs/` | Model card, architecture, API reference, source audit, experimental plan, reproducibility |
-| `models/` | Fitted artifacts, metadata, manifests, and calibration |
-| `reports/` | Audit, benchmark, and reproducibility outputs |
-| `src/data/` | Schema validation and source-table audit |
-| `src/models/` | Pipelines, training, evaluation, manifests, calibration, benchmark |
-| `src/inference/` | Artifact loading, validation, applicability domain, intervals |
-| `src/app/` | Flask routes, templates, and static assets |
-| `tests/` | Schema, audit, manifest, benchmark, domain, API, and app tests |
-| `.github/workflows/ci.yml` | Audit, training, calibration, reproducibility, benchmark, lint, tests |
-| `render.yaml` | Render runtime, build, health check, and Gunicorn start command |
+| [`docs/SOURCE_AUDIT.md`](docs/SOURCE_AUDIT.md) | What the paper says, what matches, and what remains unresolved |
+| [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) | Model form, intended use, metrics, uncertainty, limits, acceptance criteria |
+| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Baseline `0.3.0`, dataset hashes, manifest contents, update procedure |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Module responsibilities, data flow, serving contract, design constraints |
+| [`docs/API_REFERENCE.md`](docs/API_REFERENCE.md) | Request/response shapes, error codes, model-info payload |
+| [`docs/EXPERIMENTAL_PLAN.md`](docs/EXPERIMENTAL_PLAN.md) | Independent specimens, decoupled process design, external validation |
 
-More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and
-[`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
+---
 
-## Run locally
+## Reproduce the study
 
-Use Python 3.10, matching CI and Render.
+### Requirements
+
+- Python **3.10** (CI uses 3.10; Render uses 3.10.13)
+- Git
+- No external database or service
+
+### Setup
 
 ```bash
 git clone https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction.git
@@ -280,50 +593,216 @@ python -m src.app.app
 
 Open [http://localhost:5001](http://localhost:5001).
 
-## Reproduce training and evaluation
+### Training and evaluation commands
+
+| Command | What it does | Output |
+|---|---|---|
+| `python -m src.data.audit` | Compares CSVs with source tables, checks arithmetic and multiples | `reports/audit/` |
+| `python -m src.models.train_hardness` | Validates data, runs LOCO evaluation, fits deployment model | model, metadata, manifest |
+| `python -m src.models.train_oxidation` | Same workflow for the oxidation rate model | model, metadata, manifest |
+| `python -m src.models.calibration` | Computes signed OOF residual quantiles | `models/calibration.json` |
+| `python -m src.models.benchmark` | Runs every baseline and challenger under identical folds | `reports/benchmark/` |
+| `python -m src.models.reproducibility` | Recomputes LOCO metrics and compares with baseline | `reports/reproducibility/` |
+| `python -m src.models.external_validation --write` | Scores new measurements without retraining | `reports/external_validation/` |
+
+### Make targets
+
+| Command | Equivalent workflow |
+|---|---|
+| `make audit` | Source audit |
+| `make train` | Train both models |
+| `make calibrate` | Recompute intervals |
+| `make benchmark` | Fair model comparison |
+| `make reproduce` | Verify the recorded baseline |
+| `make external` | Validate and score external measurements |
+| `make test` | Run the test suite |
+| `make lint` | Ruff check and format check |
+| `make check` | Audit, reproducibility, tests, lint |
+
+The baseline and its update procedure are documented in [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md). A deliberate change to data, features, or model choice must update the manifests, calibration, benchmark, expected metrics, model card, and README together.
+
+### What is versioned
+
+- **Datasets:** CSV files with stable hashes and provenance columns.
+- **Models:** `joblib` artifacts, metadata, and manifests with artifact and dataset hashes.
+- **Calibration:** residual quantiles and effective-sample counts in `models/calibration.json`.
+- **Reports:** audit, benchmark, and reproducibility outputs used as evidence.
+- **Code:** pinned runtime dependencies and Ruff/pytest configuration.
+
+---
+
+## Testing and CI
+
+### Test suite
+
+| Area | Tests |
+|---|---:|
+| Application and API | 7 |
+| Source audit | 3 |
+| Benchmark | 3 |
+| Applicability domain | 5 |
+| External validation | 9 |
+| Manifests | 4 |
+| Inference | 2 |
+| Reproducibility | 1 |
+| Data schema | 12 |
+| **Total** | **46** |
 
 ```bash
-python -m src.data.audit            # source tables, arithmetic, multiples
-python -m src.models.train_hardness # writes model, metadata, manifest
-python -m src.models.train_oxidation
-python -m src.models.calibration    # intervals from OOF residuals
-python -m src.models.reproducibility --write
-python -m src.models.benchmark      # baselines, challengers, sensitivity
-python -m src.models.external_validation --write  # score external measurements
-
+pytest -q
 ruff check .
 ruff format --check .
-pytest -q
 ```
 
-Or use `make audit`, `make train`, `make calibrate`, `make reproduce`,
-`make benchmark`, `make external`, `make test`, and `make lint`. The
-reproducibility baseline and update procedure are documented in
-[`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md).
+### CI pipeline
 
-## CI and deployment
+GitHub Actions runs on pull requests and pushes to `main`:
 
-GitHub Actions runs on pushes and pull requests to `main`: audit, train both
-models, regenerate calibration, verify the reproducibility baseline, run the
-benchmark, validate the external measurement files, run Ruff check and format
-check, and run the tests. A data or model change that does not update the baseline
-and benchmark fails CI.
+1. Source audit.
+2. Train hardness and oxidation models.
+3. Regenerate calibration.
+4. Verify the reproducibility baseline.
+5. Run the fair model benchmark.
+6. Validate external measurement files.
+7. Run Ruff check and format check.
+8. Run the test suite.
 
-The service is deployed on Render from `main`; see [`render.yaml`](render.yaml).
-The runtime is Python 3.10.13, and the Gunicorn start command uses the Flask
-application factory. `/healthz` reports artifact availability.
+Branch protection requires a pull request and the `test-and-lint` status check before merging to `main`.
+
+> **Why this matters:** a data edit, a pipeline change, or a model swap that is not reflected in the baseline, benchmark, and documentation fails CI instead of silently changing the project's claims.
+
+---
+
+## Deployment
+
+The service is deployed from `main` on Render:
+
+| Setting | Value |
+|---|---|
+| Runtime | Python 3.10.13 |
+| Server | Gunicorn, 2 workers |
+| Health check | `/healthz` |
+| Build | `pip install -r requirements.txt` |
+| Auto-deploy | On merge/push to `main` |
+
+The health endpoint reports artifact availability:
+
+```json
+{"status":"ok","models":{"hardness":{"available":true,"error":null},"oxidation":{"available":true,"error":null}}}
+```
+
+The free Render instance can spin down while idle, so the first request after inactivity may take longer.
+
+---
+
+## External measurements
+
+The repository already contains the path for new experiments, without pretending those experiments exist:
+
+| File | Purpose |
+|---|---|
+| [`data/external/hardness_measurements.csv`](data/external/hardness_measurements.csv) | New Vickers readings with specimen, run, load, and indentation metadata |
+| [`data/external/oxidation_measurements.csv`](data/external/oxidation_measurements.csv) | Raw `w1_g`/`w2_g`, measured area, furnace conditions, replicate IDs |
+| [`data/external/README.md`](data/external/README.md) | Schema, validation rules, and scoring workflow |
+
+New measurements are validated separately, scored against the shipped models, and **never merged into training automatically**. For oxidation, the validator computes:
+
+```text
+Mass_Change_g     = w2_g − w1_g
+Areal_Gain_mg_cm2 = Mass_Change_g × 100,000 / Exposed_Area_mm2
+```
+
+The physical areal gain is reported separately. A residual against the model is computed only when `Paper_Unit_Value` is supplied on the paper's printed scale, so the unresolved unit cannot be hidden inside an apparently precise external metric.
+
+```bash
+python -m src.models.external_validation --write
+```
+
+Empty header-only templates are valid and produce an "empty template" note. See [`data/external/README.md`](data/external/README.md) for the full workflow.
+
+---
+
+## Research roadmap
+
+The current data cannot establish broad predictive reliability. The experimental plan defines the evidence needed:
+
+| Phase | Question | Evidence |
+|---|---|---|
+| **0. Source resolution** | What did the authors actually measure? | Raw weights, area, unit, sign, specimen reuse, test load |
+| **1. Replication** | Do the reported trends reproduce? | Independent specimens; 3 replicates per condition; separate oxidation coupons |
+| **2. Decoupled design** | Which process factor matters? | 3 × 3 current–speed design with heat input calculated, not confounded |
+| **3. External validation** | Does the frozen model transfer? | New heat/lot, operator, day, furnace; pre-registered evaluation |
+| **4. Active learning** | Where is the next experiment most valuable? | Predictive variance and expected improvement with replicate noise |
+
+Decision gates and metadata requirements are in [`docs/EXPERIMENTAL_PLAN.md`](docs/EXPERIMENTAL_PLAN.md). Until Phase 1–3 evidence exists, the project remains a transparent reproduction and demonstration, not a validated predictor.
+
+---
+
+## Limitations and responsible use
+
+| Limitation | Consequence | What the project does |
+|---|---|---|
+| Six effective conditions; no replicates | Cannot estimate specimen-to-specimen variability | Reports effective n and approximate intervals |
+| Collinear process schedule | Current effect is entangled with speed and heat input | Uses current as an index, not a causal factor |
+| Negative hardness LOCO R² | Hardness transfer across currents is poor | Keeps the simplest model and states the result |
+| Oxidation unit unresolved | Absolute physical interpretation is unsafe | Labels values “as printed”; no rescaling |
+| Oxidation sign unresolved | Printed equation implies mass loss | Applies no sign correction; warns in API and UI |
+| Specimen area conflict | Fourfold ambiguity in areal normalization | Uses Table 7 area and documents the conflict |
+| No independent test set | Cannot claim broad generalization | Restricts predictions to paper-tested conditions |
+| No published test load or indentation protocol | Hardness scale is identified only by the table | Exposes the caveat with every hardness result |
+
+**Do not use this project for:**
+
+- Production control, safety decisions, or process optimization.
+- Claims about current effects independent of travel speed or heat input.
+- Predictions for other alloys, processes, temperatures, currents, exposures, specimen geometries, or surface preparations.
+- Treating the printed oxidation magnitude as a physical mass change without resolving the unit and sign.
+- Replacing hardness or oxidation testing with a model estimate.
+
+New experiments should record specimen-level measurements, provenance, units, test conditions, and a distinct data status. See [`docs/EXPERIMENTAL_PLAN.md`](docs/EXPERIMENTAL_PLAN.md).
+
+---
+
+## Citation, license, and acknowledgements
+
+### Cite the experimental source
+
+```bibtex
+@inproceedings{chandra2020stellite,
+  author    = {Chandra, C. Dinesh and Rushikesh, B. and Numan, Mohammed and Venkatesh, B.},
+  title     = {Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process},
+  booktitle = {IOP Conference Series: Materials Science and Engineering},
+  volume    = {998},
+  pages     = {012061},
+  year      = {2020},
+  doi       = {10.1088/1757-899X/998/1/012061}
+}
+```
+
+Software citation metadata is in [`CITATION.cff`](CITATION.cff).
+
+### License
+
+- **Code:** [MIT License](LICENSE).
+- **Transcribed paper data:** [CC BY 3.0](data/LICENSE), with attribution to the original authors.
+- **Archived images:** retained for project history; not current model outputs.
+
+### Acknowledgements
+
+The experimental data, process schedule, and reported measurements come from Chandra, Rushikesh, Numan, and Venkatesh (2020). This repository adds transcription, audit, grouped evaluation, uncertainty reporting, software, and documentation around that published study.
+
+Maintained by [TheComputationalCore](https://github.com/TheComputationalCore). Contributions are welcome; see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+---
 
 ## Archived material
 
-The repository retains screenshots, SHAP plots, exploratory charts, and a
-decorative banner from earlier versions. **They are archival, not current
-results.** The old interface accepted heat input, soaking time, carbon, and
-manganese; those fields were removed because the paper does not support them as
-independent predictors. The old model plots use an expanded dataset and feature
-set that are no longer part of training.
+Earlier versions of this project used an expanded dataset and additional features. Those screenshots, SHAP plots, exploratory charts, and the former concept banner are retained under [`screenshots/`](screenshots/), [`docs/archive/`](docs/archive/), and [`assets/`](assets/), but **they are not current results**.
+
+The old interface accepted heat input, soaking time, carbon, and manganese; those fields were removed because the paper does not support them as independent predictors. The old plots used a different feature set and dataset. SHAP is not part of the current application or validated workflow: with collinear process factors and six conditions, per-prediction attributions would look authoritative without being identified.
 
 <details>
-<summary>Archived application screenshots</summary>
+<summary><strong>Archived application screenshots</strong></summary>
 
 | Former prediction form | Former prediction result |
 |---|---|
@@ -332,48 +811,20 @@ set that are no longer part of training.
 </details>
 
 <details>
-<summary>Archived SHAP plots</summary>
+<summary><strong>Archived SHAP and diagnostic plots</strong></summary>
 
 ![Archived hardness SHAP feature-importance plot](docs/archive/shap_hardness_bar.png)
 
 ![Archived oxidation SHAP feature-importance plot](docs/archive/shap_oxidation_bar.png)
 
-SHAP is not part of the current application or validated workflow. With
-collinear process factors and six conditions, per-prediction attributions would
-look authoritative without being identified.
+![Archived hardness actual-versus-predicted chart](docs/archive/plots/perf_hardness_actual_vs_pred.png)
+
+![Archived oxidation actual-versus-predicted chart](docs/archive/plots/perf_oxidation_actual_vs_pred.png)
 
 </details>
 
 <details>
-<summary>Archived exploratory and model-diagnostic charts</summary>
-
-These were generated for the earlier expanded dataset and are not the current
-Leave-One-Current-Out results.
-
-| Hardness correlation | Hardness distributions |
-|---|---|
-| ![Archived hardness correlation heatmap](docs/archive/plots/eda_hardness_correlation.png) | ![Archived hardness feature distributions](docs/archive/plots/eda_hardness_hist.png) |
-
-| Oxidation correlation | Oxidation distributions |
-|---|---|
-| ![Archived oxidation correlation heatmap](docs/archive/plots/eda_oxidation_correlation.png) | ![Archived oxidation feature distributions](docs/archive/plots/eda_oxidation_hist.png) |
-
-| Hardness coefficients | Oxidation feature importance |
-|---|---|
-| ![Archived hardness regression coefficients](docs/archive/plots/fi_hardness_coefficients.png) | ![Archived oxidation random-forest feature importance](docs/archive/plots/fi_oxidation_importances.png) |
-
-| Hardness actual vs predicted | Hardness residuals |
-|---|---|
-| ![Archived hardness actual-versus-predicted chart](docs/archive/plots/perf_hardness_actual_vs_pred.png) | ![Archived hardness residual chart](docs/archive/plots/perf_hardness_residuals.png) |
-
-| Oxidation actual vs predicted | Oxidation residuals |
-|---|---|
-| ![Archived oxidation actual-versus-predicted chart](docs/archive/plots/perf_oxidation_actual_vs_pred.png) | ![Archived oxidation residual chart](docs/archive/plots/perf_oxidation_residuals.png) |
-
-</details>
-
-<details>
-<summary>Former concept banner</summary>
+<summary><strong>Former concept banner</strong></summary>
 
 ![Archived illustrative project banner](assets/banner.png)
 
@@ -381,40 +832,9 @@ Decorative only; not experimental data or a current model output.
 
 </details>
 
-## Responsible interpretation
+---
 
-- Use this project to reproduce the paper's table and demonstrate a small,
-  traceable ML workflow.
-- Do not treat the models as validated on independent specimens; no such data are
-  available in the paper.
-- Do not use the outputs for production control, safety decisions, or process
-  optimization.
-- Do not infer that current alone causes a hardness or oxidation change; current,
-  travel speed, and heat input vary together.
-- Do not apply the models to other substrates, processes, temperatures, currents,
-  exposures, or specimen preparations.
-- Do not interpret the printed oxidation magnitude as a physical mass change
-  without resolving the unit and sign.
-- New experiments should record specimen-level measurements, provenance, units,
-  test conditions, and a distinct data status. See
-  [`docs/EXPERIMENTAL_PLAN.md`](docs/EXPERIMENTAL_PLAN.md).
-
-## Citation and license
-
-If you use this project, cite the experimental paper that provides its training
-data:
-
-```text
-Chandra, C. D., Rushikesh, B., Numan, M., & Venkatesh, B. (2020).
-Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials
-by TIG Surfacing Process. IOP Conference Series: Materials Science and
-Engineering, 998, 012061.
-https://doi.org/10.1088/1757-899X/998/1/012061
-```
-
-Software citation metadata is in [`CITATION.cff`](CITATION.cff).
-
-- Code: [MIT License](LICENSE).
-- Transcribed paper data: [CC BY 3.0](data/LICENSE), with attribution to the
-  original authors.
-- Contributions: see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+<p align="center">
+  <strong>If this work is useful, consider starring the repository.</strong><br>
+  <sub>Built around the principle that a small dataset should produce sharper claims, not louder ones.</sub>
+</p>
