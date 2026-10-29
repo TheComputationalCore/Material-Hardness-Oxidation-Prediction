@@ -1,15 +1,16 @@
 {
     "model_name": "Areal Oxidation Mass Gain Model",
-    "trained_at": "2026-10-28 18:53:51 UTC",
+    "model_version": "0.3.0",
+    "trained_at": "2026-10-29 05:56:15 UTC",
     "features": [
         "Material",
         "Current",
         "Exposure_Time_h"
     ],
     "metrics": {
-        "MAE": 0.0004400785185185204,
-        "RMSE": 0.0005115875518471284,
-        "R2": 0.9365391974962097
+        "MAE": 0.00013455555555555562,
+        "RMSE": 0.00016306622622665466,
+        "R2": 0.9935524656589708
     },
     "validation": {
         "method": "LeaveOneGroupOut",
@@ -22,6 +23,9 @@
         "n_samples": 18,
         "n_validation_predictions": 18,
         "final_fit_rows": 18,
+        "effective_independent_observations": 6,
+        "observation_independence_note": "Exposure-time rows within a Material/Current cell are exact multiples of the 5 h value, so they are not independent observations.",
+        "leakage_control": "Every row at the held-out current is excluded from that fold's fit; no interpolated or derived rows are present.",
         "target": "Areal_Mass_Gain_g_mm2",
         "target_unit": "g/mm^2; cumulative mass gain per exposed area, not time-normalized"
     }

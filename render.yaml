@@ -17,4 +17,5 @@ services:
       --workers 2
       --timeout 120
 
+    healthCheckPath: /healthz
     autoDeploy: true

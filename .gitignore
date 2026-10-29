@@ -5,6 +5,13 @@ __pycache__/
 # Virtual environments
 venv/
 env/
+.venv/
+
+# Test and lint caches
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 
 # macOS system files
 .DS_Store
@@ -17,6 +24,3 @@ env/
 # Temporary files
 *.log
 *.tmp
-
-# Model artifacts are versioned for deployment; keep CSV datasets reviewable too.
-models/*.joblib

@@ -1,0 +1,480 @@
+{
+  "source": {
+    "paper": {
+      "title": "Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process",
+      "authors": [
+        "C Dinesh Chandra",
+        "B Rushikesh",
+        "Mohammed Numan",
+        "B Venkatesh"
+      ],
+      "venue": "IOP Conference Series: Materials Science and Engineering 998 (2020) 012061",
+      "doi": "10.1088/1757-899X/998/1/012061",
+      "license": "CC BY 3.0",
+      "source_copies": {
+        "author_supplied": {
+          "path": "Dinesh_IOP_Conf._Ser._Mater._Sci._Eng._998_012061.pdf",
+          "sha256": "07f3f8f94732cdf908ff8ce1cacf20edb107edd82a47be21c60073a3712ca06f"
+        },
+        "retrieved_open_access": {
+          "url": "https://iopscience.iop.org/article/10.1088/1757-899X/998/1/012061/pdf",
+          "sha256": "7c199106eb974de26d0d806a6d2f5531dd1128bacd28cfbd618020ec195cb6be"
+        }
+      },
+      "copy_comparison": "All tabulated values and both oxidation equations agree between the two copies; the PDFs differ only in rendering/build metadata."
+    },
+    "process_schedule": {
+      "table": "Table 1",
+      "voltage_v": 15.0,
+      "current_a": [
+        120.0,
+        140.0,
+        160.0
+      ],
+      "weld_speed_mm_s": [
+        2.25,
+        2.43,
+        2.63
+      ],
+      "argon_pressure_kg_cm2": 5.0,
+      "heat_input_kj_mm": [
+        0.8,
+        0.864,
+        0.912
+      ],
+      "heat_input_equation": "Q = V * I / v (no arc-efficiency factor reproduces the printed values)",
+      "collinearity_note": "Current, travel speed, and heat input are a one-factor schedule: all three change together and cannot be separated from these data.",
+      "deposition": "Stellite-6 rod, 3.2 mm diameter, one 1 mm thick layer; plates 60 x 30 x 6 mm; oil quenched immediately after hardfacing."
+    },
+    "substrate_composition": {
+      "table": "Tables 2 and 3",
+      "EN-8": {
+        "C": "0.34-0.40",
+        "Mn": "0.60-1.0",
+        "P": 0.05,
+        "S": 0.005,
+        "Si": "0.10-0.40"
+      },
+      "Mild Steel": {
+        "C": 0.23,
+        "S": 0.55,
+        "Mn": 1.0,
+        "P": 0.4,
+        "Si": 0.35
+      },
+      "transcription_warning": "The mild-steel S (0.55) and P (0.40) entries are implausible for a structural mild steel and are likely missing a decimal place in the source table; they are recorded verbatim and are not used by any model.",
+      "project_derivations": {
+        "EN-8 Carbon": "0.37 = midpoint of reported 0.34-0.40 range",
+        "EN-8 Manganese": "0.8 = midpoint of reported 0.60-1.0 range",
+        "Mild Steel Carbon": "0.23 as reported",
+        "Mild Steel Manganese": "1.00 as reported"
+      }
+    },
+    "filler_composition": {
+      "table": "Table 4",
+      "material": "Stellite-6",
+      "Cr_pct": 30,
+      "W_pct": "4-5",
+      "C_pct": 1.2,
+      "Ni_pct": "<3",
+      "Mo_pct": "<1",
+      "Fe_pct": "<3",
+      "Si_pct": "<2",
+      "Co_pct": "balance"
+    },
+    "hardness": {
+      "tables": {
+        "Table 5": {
+          "substrate": "Mild Steel",
+          "unit": "Vickers hardness number",
+          "values": {
+            "120": 310,
+            "140": 353,
+            "160": 361
+          }
+        },
+        "Table 6": {
+          "substrate": "EN-8",
+          "unit": "Vickers hardness number",
+          "values": {
+            "120": 331,
+            "140": 365,
+            "160": 371
+          }
+        }
+      },
+      "method": "Vickers microhardness, ASTM E-384, 'a range of light loads'; the applied load, indentation count, and indentation locations are not reported."
+    },
+    "oxidation": {
+      "tables": {
+        "Table 8": {
+          "substrate": "Mild Steel",
+          "exposure_h": 5,
+          "values": {
+            "120": 0.002692,
+            "140": 0.00258,
+            "160": 0.002237
+          }
+        },
+        "Table 9": {
+          "substrate": "EN-8",
+          "exposure_h": 5,
+          "values": {
+            "120": 0.002603,
+            "140": 0.002296,
+            "160": 0.002163
+          }
+        },
+        "Table 10": {
+          "substrate": "Mild Steel",
+          "exposure_h": 10,
+          "values": {
+            "120": 0.005384,
+            "140": 0.005156,
+            "160": 0.004474
+          }
+        },
+        "Table 11": {
+          "substrate": "EN-8",
+          "exposure_h": 10,
+          "values": {
+            "120": 0.005206,
+            "140": 0.004592,
+            "160": 0.004326
+          }
+        },
+        "Table 12": {
+          "substrate": "Mild Steel",
+          "exposure_h": 15,
+          "values": {
+            "120": 0.008076,
+            "140": 0.00774,
+            "160": 0.006711
+          }
+        },
+        "Table 13": {
+          "substrate": "EN-8",
+          "exposure_h": 15,
+          "values": {
+            "120": 0.007809,
+            "140": 0.006888,
+            "160": 0.006489
+          }
+        }
+      },
+      "test": {
+        "table": "Table 7",
+        "specimen": "15 x 15 x 6 mm",
+        "exposed_area_mm2": 225,
+        "specimen_size_methods_statement": "Samples sizes of 30X30mm2 were cut from hardfaced plate",
+        "specimen_size_table_7_statement": "Sample size 15x15x6mm; surface area = 15x15mm2",
+        "specimen_size_conflict": "The methods statement implies 900 mm2 while Table 7 uses 225 mm2, a factor-of-four disagreement. The project uses the Table 7 area for normalization and records the conflict rather than choosing silently.",
+        "furnace_loading": "The three samples are kept in furnace (interpreted as one specimen per current, not triplicate specimens at one condition)",
+        "coating": "alumina on all faces except one",
+        "temperature_k": 973,
+        "temperature_c": 700,
+        "times_h": [
+          5,
+          10,
+          15
+        ],
+        "reported_equation": "oxidation rate = weight gain (g) / surface area (mm2)",
+        "reported_weight_gain_equation": "weight gain = w1 (before oxidation) - w2 (after oxidation)"
+      }
+    },
+    "unreported_metadata": [
+      "Vickers test load (the paper only says 'a range of light loads')",
+      "Number and location of hardness indentations per specimen",
+      "Number of replicate specimens or replicate measurements per condition",
+      "Raw specimen weights w1 and w2 (only the derived values are published)",
+      "Balance resolution and weighing procedure",
+      "Measured exposed area (225 mm2 is taken from the nominal 15 x 15 mm size)",
+      "Furnace atmosphere and heating/cooling rates",
+      "Travel-speed measurement uncertainty (measured with a stopwatch)",
+      "Deposit dilution, overlay thickness measurement, and coating/substrate interface characterization beyond 100x optical microscopy",
+      "Specimen identifiers (the project assigns them; they are not in the paper)"
+    ]
+  },
+  "comparison": {
+    "status": "pass",
+    "rows_checked": 24,
+    "expected_rows": 24,
+    "mismatches": []
+  },
+  "time_multiples": {
+    "status": "warn",
+    "exact_multiples": 11,
+    "near_multiples": 1,
+    "total_non_base_rows": 12,
+    "max_relative_deviation": 0.0007751937984495472,
+    "groups": [
+      {
+        "material": "EN-8",
+        "current_a": 120.0,
+        "exposure_h": 10.0,
+        "value": 0.005206,
+        "expected_if_derived": 0.005206,
+        "ratio_to_5h": 2.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "EN-8",
+        "current_a": 120.0,
+        "exposure_h": 15.0,
+        "value": 0.007809,
+        "expected_if_derived": 0.007809,
+        "ratio_to_5h": 3.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "EN-8",
+        "current_a": 140.0,
+        "exposure_h": 10.0,
+        "value": 0.004592,
+        "expected_if_derived": 0.004592,
+        "ratio_to_5h": 2.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "EN-8",
+        "current_a": 140.0,
+        "exposure_h": 15.0,
+        "value": 0.006888,
+        "expected_if_derived": 0.006888,
+        "ratio_to_5h": 3.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "EN-8",
+        "current_a": 160.0,
+        "exposure_h": 10.0,
+        "value": 0.004326,
+        "expected_if_derived": 0.004326,
+        "ratio_to_5h": 2.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "EN-8",
+        "current_a": 160.0,
+        "exposure_h": 15.0,
+        "value": 0.006489,
+        "expected_if_derived": 0.006489,
+        "ratio_to_5h": 3.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 120.0,
+        "exposure_h": 10.0,
+        "value": 0.005384,
+        "expected_if_derived": 0.005384,
+        "ratio_to_5h": 2.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 120.0,
+        "exposure_h": 15.0,
+        "value": 0.008076,
+        "expected_if_derived": 0.008076,
+        "ratio_to_5h": 3.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 140.0,
+        "exposure_h": 10.0,
+        "value": 0.005156,
+        "expected_if_derived": 0.00516,
+        "ratio_to_5h": 1.9984496124031008,
+        "deviation": -3.9999999999996635e-06,
+        "relative_deviation": -0.0007751937984495472,
+        "classification": "near_multiple"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 140.0,
+        "exposure_h": 15.0,
+        "value": 0.00774,
+        "expected_if_derived": 0.0077399999999999995,
+        "ratio_to_5h": 3.0000000000000004,
+        "deviation": 8.673617379884035e-19,
+        "relative_deviation": 1.1206224005018135e-16,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 160.0,
+        "exposure_h": 10.0,
+        "value": 0.004474,
+        "expected_if_derived": 0.004474,
+        "ratio_to_5h": 2.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      },
+      {
+        "material": "Mild Steel",
+        "current_a": 160.0,
+        "exposure_h": 15.0,
+        "value": 0.006711,
+        "expected_if_derived": 0.006711,
+        "ratio_to_5h": 3.0,
+        "deviation": 0.0,
+        "relative_deviation": 0.0,
+        "classification": "exact_to_printed_precision"
+      }
+    ],
+    "finding": "Eleven of twelve non-base rows reproduce k x the 5 h value to the last printed digit (k = 2 for 10 h, 3 for 15 h); one row deviates by 0.08 %. This is consistent with the 10 h/15 h rows being derived from a single rate per condition, or with implausibly exact linear kinetics."
+  },
+  "unit_analysis": {
+    "status": "warn",
+    "printed_unit": "gm/mm2",
+    "stated_area_mm2": 225.0,
+    "alternate_area_mm2": 900.0,
+    "stated_equation": "weight gain (g) / surface area (mm2)",
+    "specimen_mass_g_estimated": 10.5975,
+    "interpretation_a_values_are_g_per_mm2": {
+      "implied_mass_change_g_at_min": 0.486675,
+      "implied_mass_change_g_at_max": 1.8171,
+      "fraction_of_specimen_mass_at_min": 0.045923566878980894,
+      "fraction_of_specimen_mass_at_max": 0.17146496815286624
+    },
+    "interpretation_b_values_are_grams": {
+      "implied_areal_gain_mg_cm2_at_min": 0.9613333333333334,
+      "implied_areal_gain_mg_cm2_at_max": 3.5893333333333333
+    },
+    "interpretation_under_alternate_area": {
+      "area_mm2": 900.0,
+      "implied_mass_change_g_at_min_if_g_per_mm2": 1.9467,
+      "implied_mass_change_g_at_max_if_g_per_mm2": 7.2684,
+      "implied_areal_gain_mg_cm2_at_min_if_grams": 0.24033333333333334,
+      "implied_areal_gain_mg_cm2_at_max_if_grams": 0.8973333333333333
+    },
+    "provisional_reading": "The printed magnitudes are more consistent with raw mass in grams than with g/mm2. Under the 225 mm2 area this gives 0.96-3.59 mg/cm2; under the 900 mm2 area stated in the methods it gives 0.24-0.90 mg/cm2. Both are physically plausible. No conversion or unit correction is applied because the raw weights are not published and the area itself is inconsistent.",
+    "finding": "If the tabulated numbers are g/mm2 as printed, the implied mass change is 0.487-1.817 g, or 4.6-17.1 % of a 15 x 15 x 6 mm steel specimen, which is not physically plausible for a 5-15 h exposure at 700 C. If the numbers are raw weight change in grams, the areal gain is 0.96-3.59 mg/cm2, which is plausible. The unit is therefore unresolved; the column name follows the paper's label and the absolute scale should not be treated as g/mm2 without the raw weights."
+  },
+  "specimen_size": {
+    "status": "warn",
+    "methods_statement": "Samples sizes of 30X30mm2 were cut from hardfaced plate",
+    "table_7_statement": "Sample size 15x15x6mm; surface area = 15x15mm2",
+    "area_ratio": 4.0,
+    "finding": "The methods statement implies 900 mm2 while Table 7 uses 225 mm2, a factor-of-four disagreement. The project uses the Table 7 area for normalization and records the conflict rather than choosing silently."
+  },
+  "sign_analysis": {
+    "status": "warn",
+    "printed_equation": "weight gain = w1 (before oxidation) - w2 (after oxidation)",
+    "printed_values": "all positive",
+    "finding": "Table 7 defines weight gain as w1 (before) minus w2 (after). For oxidation the specimen usually gains mass (w2 > w1), which would make this quantity negative, yet every tabulated value is positive. Either the equation is transposed or the specimens lost mass. The raw weights are not published, so the sign cannot be resolved. Values are preserved exactly as printed and no sign correction is applied."
+  },
+  "independence": {
+    "status": "warn",
+    "hardness": {
+      "rows": 6,
+      "observation_groups": 6,
+      "rows_per_group": 1,
+      "replicates_reported": false,
+      "effective_independent_observations": 6
+    },
+    "oxidation": {
+      "rows": 18,
+      "observation_groups": 6,
+      "rows_per_group": {
+        "EN-8@120": 3,
+        "EN-8@140": 3,
+        "EN-8@160": 3,
+        "Mild Steel@120": 3,
+        "Mild Steel@140": 3,
+        "Mild Steel@160": 3
+      },
+      "replicates_reported": false,
+      "specimen_reuse_across_exposures": "unknown",
+      "effective_independent_observations": 6
+    },
+    "finding": "Each material/current condition contributes one reported hardness value and three reported oxidation values. No replicate specimens, repeated readings, or uncertainty estimates are published, and specimen reuse across exposure times is not stated. The paper says three samples were kept in the furnace per run, which is consistent with one specimen at each current rather than triplicate specimens. Treating all 18 oxidation rows as independent would overstate the information by roughly a factor of three."
+  },
+  "arithmetic": {
+    "status": "pass",
+    "heat_input": [
+      {
+        "current_a": 120.0,
+        "weld_speed_mm_s": 2.25,
+        "printed_heat_input_kj_mm": 0.8,
+        "computed_heat_input_kj_mm": 0.8,
+        "difference": 0.0
+      },
+      {
+        "current_a": 140.0,
+        "weld_speed_mm_s": 2.43,
+        "printed_heat_input_kj_mm": 0.864,
+        "computed_heat_input_kj_mm": 0.8641975308641975,
+        "difference": 0.00019753086419749266
+      },
+      {
+        "current_a": 160.0,
+        "weld_speed_mm_s": 2.63,
+        "printed_heat_input_kj_mm": 0.912,
+        "computed_heat_input_kj_mm": 0.9125475285171103,
+        "difference": 0.0005475285171102628
+      }
+    ],
+    "max_heat_input_difference_kj_mm": 0.0005475285171102628,
+    "heat_input_finding": "Q = 15 V * I / v reproduces the printed schedule without an arc-efficiency factor. Current, travel speed, and heat input therefore form a single one-dimensional schedule and cannot be separated as independent factors.",
+    "chemistry": [
+      {
+        "material": "EN-8",
+        "carbon_csv": 0.37,
+        "carbon_expected": 0.37,
+        "manganese_csv": 0.8,
+        "manganese_expected": 0.8
+      },
+      {
+        "material": "Mild Steel",
+        "carbon_csv": 0.23,
+        "carbon_expected": 0.23,
+        "manganese_csv": 1.0,
+        "manganese_expected": 1.0
+      }
+    ],
+    "chemistry_finding": "EN-8 carbon and manganese are midpoints of the reported ranges; mild-steel values are single reported values. Chemistry is metadata and is not a model feature because it is tied to substrate identity."
+  },
+  "missing_metadata": {
+    "status": "warn",
+    "items": [
+      "Vickers test load (the paper only says 'a range of light loads')",
+      "Number and location of hardness indentations per specimen",
+      "Number of replicate specimens or replicate measurements per condition",
+      "Raw specimen weights w1 and w2 (only the derived values are published)",
+      "Balance resolution and weighing procedure",
+      "Measured exposed area (225 mm2 is taken from the nominal 15 x 15 mm size)",
+      "Furnace atmosphere and heating/cooling rates",
+      "Travel-speed measurement uncertainty (measured with a stopwatch)",
+      "Deposit dilution, overlay thickness measurement, and coating/substrate interface characterization beyond 100x optical microscopy",
+      "Specimen identifiers (the project assigns them; they are not in the paper)"
+    ],
+    "finding": "These conditions are not published and are recorded as unknown rather than imputed. They limit any claim about measurement uncertainty or reproducibility."
+  },
+  "hashes": {
+    "data/hardness.csv": "1d83be25aa4b59453bc24b816c7f6267be0e0b7480bc8fc2a394fba9d6745a60",
+    "data/oxidation.csv": "be5edafcebde4ada00ba3578df623b84953f79ed030f109f20cfdf9ade6f820b",
+    "data/source_tables.json": "a444175f2ed578396b6a1d1a25de6cfd6553e4b45fcb799a9e0d1aeda8953bb0",
+    "source_pdf_author_supplied": "07f3f8f94732cdf908ff8ce1cacf20edb107edd82a47be21c60073a3712ca06f",
+    "source_pdf_retrieved": "7c199106eb974de26d0d806a6d2f5531dd1128bacd28cfbd618020ec195cb6be"
+  }
+}

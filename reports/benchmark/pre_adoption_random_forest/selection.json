@@ -1,0 +1,89 @@
+{
+    "rule": {
+        "primary_protocol": "LOCO_current",
+        "secondary_protocol": "LOGO_condition",
+        "improvement_threshold": 0.2,
+        "min_folds_improved": 2,
+        "secondary_tolerance": 0.1
+    },
+    "targets": [
+        {
+            "target": "hardness",
+            "shipped_model": "linear",
+            "best_model": "ridge",
+            "ranking": [
+                "ridge",
+                "linear",
+                "global_median",
+                "global_mean",
+                "substrate_mean",
+                "current_mean",
+                "random_forest"
+            ],
+            "shipped_primary_MAE": 26.25,
+            "best_primary_MAE": 23.099999999999994,
+            "relative_improvement": 0.12000000000000022,
+            "folds_improved": 1,
+            "n_folds": 3,
+            "secondary_relative_change": -0.11369031917699722,
+            "criteria": {
+                "improvement_threshold": 0.2,
+                "min_folds_improved": 2,
+                "secondary_tolerance": 0.1
+            },
+            "folds_best": {
+                "ridge": 0,
+                "linear": 1,
+                "global_median": 1,
+                "global_mean": 0,
+                "substrate_mean": 0,
+                "current_mean": 0,
+                "random_forest": 1
+            },
+            "decision": "keep_shipped",
+            "rationale": "Best challenger ridge: improvement 12.0% is below the 20% threshold; only 1 of 3 folds improve. Keep the shipped model."
+        },
+        {
+            "target": "oxidation",
+            "shipped_model": "random_forest",
+            "best_model": "rate_linear",
+            "ranking": [
+                "rate_linear",
+                "linear_full",
+                "ridge_full",
+                "linear_time",
+                "random_forest",
+                "rate_mean",
+                "time_mean",
+                "substrate_mean",
+                "global_mean",
+                "global_median"
+            ],
+            "shipped_primary_MAE": 0.0004400785185185204,
+            "best_primary_MAE": 0.00013455555555555562,
+            "relative_improvement": 0.6942464812676538,
+            "folds_improved": 3,
+            "n_folds": 3,
+            "secondary_relative_change": -0.47197807818534765,
+            "criteria": {
+                "improvement_threshold": 0.2,
+                "min_folds_improved": 2,
+                "secondary_tolerance": 0.1
+            },
+            "folds_best": {
+                "rate_linear": 3,
+                "linear_full": 1,
+                "ridge_full": 0,
+                "linear_time": 0,
+                "random_forest": 0,
+                "rate_mean": 1,
+                "time_mean": 0,
+                "substrate_mean": 0,
+                "global_mean": 0,
+                "global_median": 0
+            },
+            "decision": "challenger_meets_criteria",
+            "rationale": "rate_linear reduces primary LOCO MAE by 69.4% (threshold 20%), wins 3 of 3 fold comparisons, and changes secondary LOGO MAE by -47.2% (limit 10%). Recommend review for adoption in a separate change."
+        }
+    ]
+}

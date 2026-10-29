@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, cite it and the experimental paper that provides its data."
+title: "Material Hardness & Oxidation Prediction"
+abstract: >-
+  A paper-grounded machine-learning demonstration for Stellite-6 TIG hardfacing.
+  The service reports exploratory hardness and cumulative areal oxidation mass
+  gain estimates only at the conditions reported in Chandra et al. (2020), and
+  documents the unresolved unit, sign, and independence issues in the source
+  table values.
+type: software
+authors:
+  - name: "TheComputationalCore"
+    website: "https://github.com/TheComputationalCore"
+repository-code: "https://github.com/TheComputationalCore/Material-Hardness-Oxidation-Prediction"
+url: "https://material-hardness-oxidation-prediction.onrender.com/"
+license: MIT
+keywords:
+  - materials informatics
+  - Stellite-6
+  - TIG hardfacing
+  - hardness
+  - oxidation
+  - small-data regression
+references:
+  - type: article
+    title: "Experimental Studies of Stellite-6 Hardfaced Layer on Ferrous Materials by TIG Surfacing Process"
+    authors:
+      - family-names: Chandra
+        given-names: C. Dinesh
+      - family-names: Rushikesh
+        given-names: B.
+      - family-names: Numan
+        given-names: Mohammed
+      - family-names: Venkatesh
+        given-names: B.
+    journal: "IOP Conference Series: Materials Science and Engineering"
+    volume: 998
+    start: "012061"
+    year: 2020
+    doi: "10.1088/1757-899X/998/1/012061"

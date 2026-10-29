@@ -2,12 +2,17 @@
 pipelines.py
 Defines sklearn preprocessing and model pipelines for:
 - Hardness prediction
-- Oxidation rate prediction
+- Oxidation mass-gain prediction
 
 Contains:
 - Canonical feature lists
 - ColumnTransformer preprocessing
 - Fully reproducible pipelines
+
+The oxidation model is a linear rate model adopted in v0.3.0 after the benchmark
+in reports/benchmark/ showed a 69% reduction in leave-one-current-out MAE versus
+the previous random forest. The random forest builder is retained so the
+benchmark can still compare against it.
 """
 
 from __future__ import annotations
@@ -17,6 +22,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+from src.models.estimators import RateLinearRegressor
 
 # -------------------------------------------------------------------
 # Canonical feature order (used across training + inference)
@@ -42,6 +49,7 @@ numeric_cols_oxidation = ["Current", "Exposure_Time_h"]
 # -------------------------------------------------------------------
 # Preprocessors
 # -------------------------------------------------------------------
+
 
 def make_preprocessor(numeric_features):
     """
@@ -74,6 +82,7 @@ preprocessor_oxidation = make_preprocessor(numeric_cols_oxidation)
 # Pipeline Builders
 # -------------------------------------------------------------------
 
+
 def build_hardness_pipeline() -> Pipeline:
     """
     Build the full sklearn pipeline for hardness prediction.
@@ -87,10 +96,17 @@ def build_hardness_pipeline() -> Pipeline:
     )
 
 
-def build_oxidation_pipeline() -> Pipeline:
+def build_oxidation_pipeline() -> RateLinearRegressor:
     """
-    Build the full sklearn pipeline for oxidation rate prediction.
-    Uses a small random forest over the paper's measured current and time levels.
+    Build the production oxidation model.
+    Mass-gain rate is linear in substrate and current, then scaled by exposure time.
+    """
+    return RateLinearRegressor()
+
+
+def build_oxidation_random_forest_pipeline() -> Pipeline:
+    """
+    Build the pre-v0.3.0 random forest, kept as a benchmark challenger.
     """
     return Pipeline(
         steps=[

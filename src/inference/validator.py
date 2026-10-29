@@ -31,8 +31,8 @@ def validate_numeric(name: str, value: Any) -> float:
         raise ValidationError(f"Missing required value for '{name}'.")
     try:
         number = float(value)
-    except (TypeError, ValueError):
-        raise ValidationError(f"Field '{name}' must be numeric.")
+    except (TypeError, ValueError) as error:
+        raise ValidationError(f"Field '{name}' must be numeric.") from error
     if not math.isfinite(number):
         raise ValidationError(f"Field '{name}' must be finite.")
     return number
@@ -67,5 +67,5 @@ def to_dataframe(data: dict[str, Any], feature_order: list[str]) -> pd.DataFrame
     try:
         row = [data[feature] for feature in feature_order]
     except KeyError as error:
-        raise ValidationError(f"Missing required field: {error}")
+        raise ValidationError(f"Missing required field: {error}") from error
     return pd.DataFrame([row], columns=feature_order)

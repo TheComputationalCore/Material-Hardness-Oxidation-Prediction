@@ -18,9 +18,10 @@ def save_model(model, path):
     print(f"Model saved to: {path}")
 
 
-def save_metadata(path, model_name, features, metrics, validation=None):
+def save_metadata(path, model_name, features, metrics, validation=None, model_version=None):
     metadata = {
         "model_name": model_name,
+        "model_version": model_version,
         "trained_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),  # noqa: UP017 — Python 3.10 compatibility.
         "features": features,
         "metrics": metrics,

@@ -1,0 +1,52 @@
+{
+    "expected_baseline": "0.3.0",
+    "protocol": {
+        "hardness": "LeaveOneGroupOut grouped by Current; refit on all six rows for deployment",
+        "oxidation": "LeaveOneGroupOut grouped by Current; refit on all eighteen rows for deployment"
+    },
+    "targets": {
+        "hardness": {
+            "ok": true,
+            "dataset_sha256": "1d83be25aa4b59453bc24b816c7f6267be0e0b7480bc8fc2a394fba9d6745a60",
+            "dataset_matches_expected": true,
+            "metrics": {
+                "MAE": 26.25,
+                "RMSE": 27.514768761521513,
+                "R2": -0.655686167304538
+            },
+            "expected": {
+                "MAE": 26.25,
+                "RMSE": 27.514768761521513,
+                "R2": -0.655686167304538
+            },
+            "metric_matches_expected": {
+                "MAE": true,
+                "RMSE": true,
+                "R2": true
+            },
+            "manifest_problems": []
+        },
+        "oxidation": {
+            "ok": true,
+            "dataset_sha256": "be5edafcebde4ada00ba3578df623b84953f79ed030f109f20cfdf9ade6f820b",
+            "dataset_matches_expected": true,
+            "metrics": {
+                "MAE": 0.00013455555555555562,
+                "RMSE": 0.00016306622622665466,
+                "R2": 0.9935524656589708
+            },
+            "expected": {
+                "MAE": 0.00013455555555555562,
+                "RMSE": 0.00016306622622665466,
+                "R2": 0.9935524656589708
+            },
+            "metric_matches_expected": {
+                "MAE": true,
+                "RMSE": true,
+                "R2": true
+            },
+            "manifest_problems": []
+        }
+    },
+    "ok": true
+}

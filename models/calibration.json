@@ -1,0 +1,49 @@
+{
+    "schema_version": "1.0",
+    "generated_at": "2026-10-29 06:14:52 UTC",
+    "method": "Empirical out-of-fold signed-residual quantiles. With six independent conditions these are approximate intervals, not guaranteed coverage.",
+    "targets": {
+        "hardness": {
+            "target": "Hardness",
+            "n_oof_predictions": 6,
+            "effective_independent_observations": 6,
+            "protocol": "LeaveOneGroupOut grouped by Current",
+            "residual_bias": 15.75,
+            "residual_std": 24.714368290530913,
+            "MAE": 26.25,
+            "q05_residual": -17.5,
+            "q95_residual": 36.5,
+            "q50_abs_residual": 28.25,
+            "q90_abs_residual": 36.5,
+            "q95_abs_residual": 36.5,
+            "max_abs_residual": 36.5,
+            "interval_90_offsets": {
+                "lower": -17.5,
+                "upper": 36.5
+            },
+            "interval_90_half_width": 36.5,
+            "interval_95_half_width": 36.5
+        },
+        "oxidation": {
+            "target": "Areal_Mass_Gain_g_mm2",
+            "n_oof_predictions": 18,
+            "effective_independent_observations": 6,
+            "protocol": "LeaveOneGroupOut grouped by Current",
+            "residual_bias": 2.7833333333333052e-05,
+            "residual_std": 0.00016533143084768807,
+            "MAE": 0.00013455555555555562,
+            "q05_residual": -0.0003465000000000022,
+            "q95_residual": 0.0002609999999999991,
+            "q50_abs_residual": 0.00011550000000000015,
+            "q90_abs_residual": 0.0002609999999999991,
+            "q95_abs_residual": 0.0003465000000000022,
+            "max_abs_residual": 0.0003465000000000022,
+            "interval_90_offsets": {
+                "lower": -0.0003465000000000022,
+                "upper": 0.0002609999999999991
+            },
+            "interval_90_half_width": 0.0002609999999999991,
+            "interval_95_half_width": 0.0003465000000000022
+        }
+    }
+}
