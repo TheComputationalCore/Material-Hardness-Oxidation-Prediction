@@ -257,7 +257,7 @@ flowchart LR
 | `src/app/` | Flask routes, templates, and static assets |
 | `tests/` | Schema, audit, manifest, benchmark, domain, API, and app tests |
 | `.github/workflows/ci.yml` | Audit, training, calibration, reproducibility, benchmark, lint, tests |
-| `render.yaml`, `Procfile` | Render and Gunicorn deployment configuration |
+| `render.yaml` | Render runtime, build, health check, and Gunicorn start command |
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) and
 [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
